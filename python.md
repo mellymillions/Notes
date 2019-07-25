@@ -43,16 +43,17 @@ top_travel_cities[2]
 top_travel_cities[0:2]
 ['Solta', 'Greenville']
 ```
-Storing and assigning a `slice`:
-``python
+Storing and assigning a `slice`
+```python
 top_two = top_travel_cities[0:2]
 top_two
 ['Solta', 'Greenville']
-Append: Adding to the list
-``python
+```
+append - Adding to the list
+```python
 top_travel_cities.append('San Antonio')
 ```
-`pop`: Removing the last element from a list
+pop - Removing the last element from a list
 ```python
 top_travel_cities.pop()
 'San Antonio'
@@ -61,7 +62,7 @@ top_travel_cities.pop()
 ```python
 unique_travel_cities = set(top_travel_cities)
 ```
-Convert a set into a List (and test it):
+Convert a set into a List and test it:
 ```python
 unique_travel_cities = list(unique_travel_cities)
 type(unique_travel_cities)
