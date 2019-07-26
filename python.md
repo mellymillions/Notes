@@ -72,3 +72,33 @@ Use `len` to check length of a list. Helpful to determine if your conversion fro
 ```python
 len(unique_travel_cities)
 unique_travel_cities
+```
+Change an element from the middle of the list, we can access and then reassign that element. For example, let's change 'Walla Walla Valley' to the number 4.
+```python
+top_travel_cities[4]
+'Walla Walla Valley'
+top_travel_cities[4] = 4
+top_travel_cities
+['Solta',
+ 'Greenville',
+ 'Buenos Aires',
+ 'Los Cabos',
+ 4,]
+ ```
+ Determining difference between unique varibles and original list. Convert all back to list from set first. Then, output is the different in unique values. In this example there are 13 countries and we found 10 unique_countries after converting the 'list' to 'set'.
+ ```python
+ len(countries)-len(unique_countries)
+ 3
+ ```
+ For data visualization: First we download a mapping library with 'pip'. Pip is another tool that allows us to easily download various Python libraries from the Internet.
+ ```python
+ !pip install folium
+ ```
+ Using 'pip': our folium library is available to us. Now we just tell Python that we will be using folium in our codebase by writing import folium in the next cell. (In this example we already assigned coordinates to the latitude and longitude variables below. Reminder that quotes are not necessary when assigning integer variables).
+ ```python
+ import folium
+buenos_map = folium.Map([ba_latitude, ba_longitude])
+buenos_map
+```
+
+ 
