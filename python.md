@@ -100,5 +100,31 @@ top_travel_cities
 buenos_map = folium.Map([ba_latitude, ba_longitude])
 buenos_map
 ```
+Add a marker to the map. In this case we used the folium library to create a marker and specified coordinates of the marker as a list. Add the marker to our map with the 'add_to' function.
+```python
+buenos_marker = folium.Marker([ba_latitude, ba_longitude])
+buenos_marker.add_to(buenos_map)
+ ```
+ Matching coordinates on a Map using Folium
+ ```python
+neighborhoods = ['Palermo', 'Ricoleta', 'Santelmo', 'Puerto Madero', 'Belgrano', 'La Boca']
+marker_one = folium.Marker([-34.5711, -58.4233])
+marker_two = folium.Marker([-34.5895, -58.3974])
+marker_three = folium.Marker([-34.6212, -58.3731])
+marker_four = folium.Marker([-34.6177, -58.3621])
+marker_five = folium.Marker([-34.603722,  -58.381592])
+marker_six = folium.Marker([-34.6037, -58.3816])
+neighborhood_markers = [marker_one, marker_two, marker_three, marker_four, marker_five, marker_six]
+```
+Assign a marker to one of the above coordinates
+```python
+la_boca_marker = folium.Marker([-34.6037, -58.3816])
+```
+View the map (with Zoom) to see Marker:
+```python
+import folium
+buenos_map = folium.Map([ba_latitude, ba_longitude], zoom_start = 12)
+la_boca_marker.add_to(buenos_map)
+buenos_map
+```
 
- 
