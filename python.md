@@ -236,6 +236,11 @@ jerry
 travel_df = pandas.read_excel('./cities.xlsx')
 cities = travel_df.to_dict('records')
 cities[0]
+#OR
+import pandas as pd
+file_name = './cities.xlsx'
+travel_df = pd.read_excel(file_name)
+cities = travel_df.to_dict('records')
 ```
 Here is that same code with comments for context:
 ```python
@@ -248,10 +253,124 @@ travel_df = pandas.read_excel('./cities.xlsx')
 cities = travel_df.to_dict('records')
 # now the whole excel spreadsheet is in Python!!
  ```
-Keys and values from a Dictionary:
+ To see only the keys in a Dictionary. You don't need to see all the associated values if you're looking for just the types of information that the Dictionary has present.
  ```python
  cities[0].keys()
- dict_keys(['City', 'Country', 'Population', 'Area'])# Note that the keys() function returns a dict_keys object. It's a little tricky to work with that type of object, so let's coerce it into a list.
+ dict_keys(['City', 'Country', 'Population', 'Area'])
+ # Note that the keys() function returns a dict_keys object. It's a little tricky to work with that type of object, so let's coerce it into a list:
+ list(cities[0].keys()) 
+ ['City', 'Country', 'Population', 'Area']
  ```
+ To see just the values in a Dictionary, and not keys, try this:
+ ```python
+ cities[0].values()
+ dict_values(['Solta', 'Croatia', 1700, 59])
+ #Or again, even simpler, try using a list funtion:
+ list(cities[0].values())
+ ['Solta', 'Croatia', 1700, 59]
+ ```
+Two ways of creating Dictionaries:
+```python
+#The 1st Way:
+philadelphia = {'City': 'Philadelphia'}
+#The 2nd Way:
+pittsburgh = dict(city='Pittsburgh')
+pittsburgh
+#Python knows how to convert the string to the dictionary. Here's the same structure with more keys and variables:
+dict(city="Las Vegas", state="Nevada")
+{'city': 'Las Vegas', 'state': 'Nevada'}
+```
+DATA VISUALIZATION
+There are various Python visualization tools we can use to display our data. In this lesson, we will be using Plotly, as it produces nice looking graphs and is easy to work with.
+
+We can easily download the plotly library with the use of 'pip'.
+```python
+!pip install plotly==3.3.0
+#In this case we are using plotly offline account.
+import plotly
+plotly.offline.init_notebook_mode(connected=True)
+```
+Building a graph using Plotly:
+Create a new dictionary and assign it to 'trace0'. Then set 'x' key that points to a list of xx values, and create a 'y' key with a value of a list of yy values.
+```python
+trace0 = {'type': 'bar', 'x': ['jack', 'jill', 'sandy'], 'y': [8, 11, 10]}
+trace0
+#In this case, the type of graph is a 'bar', and there are three variables assigned to each the X axis and the Y axis.
+```
+Plot the graph!  ( This graph has only ONE x and ONE y variable, with three data points in each)
+```python
+import plotly
+
+plotly.offline.init_notebook_mode(connected=True)
+trace0 = {'type': 'bar', 'x': ['jack', 'jill', 'sandy'], 'y': [8, 11, 10]}
+
+plotly.offline.iplot([trace0])
+# Notice in this code strucuture the 'trace0' described above is now embedded in the offline Plotly account also described above.
+```
+Understanding 'Plot' vs 'Trace0'. (Unlike the one above, this graph has 2 sets or 'Traces' of data for each x and y 'key' , with four 'variable' data points on available in each)
+```python
+trace0 = {'type': 'bar', 'x': ['jack', 'jill', 'sandy', 'blaise'], 'y': [8, 11, 8, 13, 6, 4]}
+trace1 = {'type': 'bar', 'x': ['jack', 'jill', 'sandy', 'gob'], 'y': [4, 12, 3, 14, 8, 1]}
+
+plotly.offline.iplot([trace0, trace1])
+#this data visulualization is represented as a bar graph, as noted in the trace.
+```
+Building a 'trace': build a trace. A trace is a dictionary with a key of x and a key of y. We have set up a trace to look like the following: trace_first_three = {'x': x_values, 'y': y_values}. 
+```python
+#First define x_values so that it is a list of names of the first three cities, 
+x_values = [cities[0]['City'], cities[1]['City'], cities[2]['City']]
+#and y_values as those city's populations.
+y_values = [cities[0]['Population'], cities[1]['Population'], cities[2]['Population']]
+#And then Plot!
+trace_first_three_pops = {'x': x_values, 'y': y_values}
+
+plotly.offline.iplot([trace_first_three_pops])
+#This time, data is represented in a line graph (Line is the default!)
+```
+Modifying a Trace: The default is a line graph. We can our trace a bar trace by setting the 'type' key equal to 'bar'.
+```python
+example_trace = {'type': 'bar', 'x': x_values, 'y': y_values, 'text': ["label_1", "label_2", "label_3"]}
+#In this case, we have also added labels to the graph!
+```
+Creating a single trace:
+```python
+bar_trace_first_three_pops = {'type': 'bar', 'x': x_values, 'y': y_values, 'text':["Buenos Aires", "Toronto", "PyeongChang"]}
+```
+Adding a second trace to plot side by side
+
+Ok, now let's plot two different traces side by side. First, create another trace called bar_trace_first_three_areas that is like our bar_trace_first_three_pops except the values are a list of areas. We will display this side by side along our bar_trace_first_three_pops in the plot below.
+```python
+y_values2 = [cities[0]['Area'], cities[1]['Area'], cities[2]['Area']]
+#First, I created a new variable for Area which I called y_values2.
+bar_trace_first_three_pops = {'type': 'bar', 'x': x_values, 'y': y_values, 'text': ["Buenos Aires", "Toronto", "Pyeongchang"]}
+bar_trace_first_three_areas = {'type': 'bar', 'x': x_values, 'y': y_values2, 'text': ["Buenos Aires", "Toronto", "Pyeongchang"]}
+#This graph compares the overall population of each city to the overall area. Clearly, Toronto has much more space for its population than the other two cities.
+``` 
+Summary of Plotly:
+In this section, we saw how we use data visualizations to better understand the data. We do the following. Import plotly:
+```python
+import plotly
+
+plotly.offline.init_notebook_mode(connected=True)
+#Then we define a trace, which is a Python dictionary.
+
+trace = {'x': [], 'y': [], 'text': [], 'type': 'bar'}
+#Finally, we display our trace with a call to the following method:
+
+plotly.offline.iplot([trace])
+#the end!
+```
+
+
+
+
+
+
+
+
+
+
+
+
  
  
