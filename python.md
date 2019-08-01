@@ -248,5 +248,10 @@ travel_df = pandas.read_excel('./cities.xlsx')
 cities = travel_df.to_dict('records')
 # now the whole excel spreadsheet is in Python!!
  ```
+Keys and values from a Dictionary:
+ ```python
+ cities[0].keys()
+ dict_keys(['City', 'Country', 'Population', 'Area'])# Note that the keys() function returns a dict_keys object. It's a little tricky to work with that type of object, so let's coerce it into a list.
+ ```
  
  
