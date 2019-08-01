@@ -1,4 +1,6 @@
 # Python
+LESSON 1: Introduction to Python
+
 This is how you capitalize first letters
 ```python
 string = "art vandelay" # 'Art Vandelay'
@@ -127,4 +129,124 @@ buenos_map = folium.Map([ba_latitude, ba_longitude], zoom_start = 12)
 la_boca_marker.add_to(buenos_map)
 buenos_map
 ```
+LESSON 2: Dictionary
 
+Creating a direct association between the attribute or key and its correlated value (i.e. {'key': "value"}). This datatype makes it easier to store and access information, such as the attributes of a person or other entity. Always start and end a Dictionary with curly brackets {}.
+```python
+terrance = {'name': "Terrance", 'age': 25, 'weight': 72, 'height': 165, 'fav_lang': "Python"}
+```
+If a dictionary is: friends = {'name': 'Friends', 'genre': 'sitcom', 'no_of_seasons': 10}
+
+Retreiving a Dictionary:
+```python
+friends
+{'name': 'Friends', 'genre': 'sitcom', 'no_of_seasons': 10}
+```
+OR: Retreiving information from a Dictionary
+```python
+friends['no_of_seasons']
+10
+```
+Add to a Dictionary
+``python
+friends['no_of_episodes'] = 236
+friends
+{'name': 'Friends',
+ 'genre': 'sitcom',
+ 'no_of_seasons': 10,
+ 'no_of_episodes': 236}
+ ```
+ Delete from a Dictionary using 'del'
+ ```python
+ friends[Test] = 'some value'
+ del friends[Test]
+ ```
+Lists within a Dictionary: If there are more than one value/variable associated with an item. This example uses the two co-creators of Friends:
+ ```python
+ creators = ['David Crane', 'Marta Kauffman']
+ friends['creators'] = ['David Crane', 'Marta Kauffman']
+ ```
+ NOW the Dictionary looks like this:
+ ```python
+ friends
+{'name': 'Friends',
+ 'genre': 'sitcom',
+ 'no_of_seasons': 10,
+ 'no_of_episodes': 236,
+ 'creators': ['David Crane', 'Marta Kauffman']}
+ ```
+ To see just ONE item or list from the dictionary, ask:
+ ```python
+ friends['creators']
+ ['David Crane', 'Marta Kauffman']
+ ```
+ Store one of the list items as a single variable:
+ ```python
+ david = friends['creators'][0]
+ ```
+(In above line, we referenced the dictionary, then got to the list of creators through using the key creators. And now that we are pointing to that list, we use the brackets to reference the string at index zero.) If we wanted Marta Kaufmann, it would be:
+```python
+Marta = friends['creators'][1]
+```
+Nested Structures! 
+After creating a Dictionary for Seinfeld that mimics the structure of the Friends Dictionary, we now have...a 'list' of TV Shows! 
+INPUT is here:
+```python
+tv_shows = [friends, seinfeld]
+tv_shows
+```
+The nested OUTPUT is here:
+```python
+[{'name': 'Friends',
+  'genre': 'sitcom',
+  'no_of_seasons': 10,
+  'no_of_episodes': 236,
+  'creators': ['David Crane', 'Marta Kauffman']},
+ {'name': 'Seinfeld',
+  'creators': ['Larry David', 'Jerry Seinfeld'],
+  'genre': 'sitcom',
+  'no_of_seasons': 10,
+  'no_of_episodes': 180}]
+  ```
+To select specific information from a nested structure, follow this format. 
+
+You start by selecting which of the TV shows (in this case, 'Friends' is 0 and 'Seinfeld' is 1, per output above).
+  ```python
+  tv_shows[1]
+ {'name': 'Seinfeld',
+ 'creators': ['Larry David', 'Jerry Seinfeld'],
+ 'genre': 'sitcom',
+ 'no_of_seasons': 10,
+ 'no_of_episodes': 180}
+ ```
+ Then, choose the rest of the information you are looking for (in this case, it's Jerry), and then assigning that pathway as the variable 'jerry'.
+ ```python
+ tv_shows[1]['creators']
+ ['Larry David', 'Jerry Seinfeld']
+ tv_shows[1]['creators'][1]
+ 'Jerry Seinfeld'
+ jerry = tv_shows[1]['creators'][1]
+jerry
+ ```
+ Importing Dictionaries:
+ 
+ How to move an .xlsx (Excel) file into Python! 
+ ```python
+ import pandas
+travel_df = pandas.read_excel('./cities.xlsx')
+cities = travel_df.to_dict('records')
+cities[0]
+```
+Here is that same code with comments for context:
+```python
+# Here we use a library, which is some code not part of standard Python, to make this process easier 
+import pandas
+# If we use the `import pandas` we have access to the pandas library 
+travel_df = pandas.read_excel('./cities.xlsx')
+# We call the pandas.read_excel method and pass through the string './cities.xlsx' as the file is called cities.xlsx.  By saying './' we are saying 
+# go to the current folder, lists-lab, and find the 'cities.xlsx' file there
+cities = travel_df.to_dict('records')
+# now the whole excel spreadsheet is in Python!!
+ ```
+ 
+ 
