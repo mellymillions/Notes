@@ -360,17 +360,562 @@ trace = {'x': [], 'y': [], 'text': [], 'type': 'bar'}
 plotly.offline.iplot([trace])
 #the end!
 ```
+INTRO TO LOOPS
 
+A 'for' loop in Python is primarily used for going through elements of a list one by one. 
+```python
+#Using Loops, instead of doing this:
+zero_to_three = [0, 1, 2, 3]
+print(zero_to_three[0])
+print(zero_to_three[1])
+print(zero_to_three[2])
+print(zero_to_three[3])
+0
+1
+2
+3
+#This code performs the exact same function:
+for number in zero_to_three:
+    print(number)
+0
+1
+2
+3
+```
+***Breaking down components of a for loop***: A for loop essentially has two necessary components, which we'll refer to as arguments. 
 
+The first argument is the variable name we are assigning to an element, or in this case, `number`. 
 
+The second argument is the collection we are iterating over, or in this case, the list `zero_to_three`.
 
+We can give any name to the variable. The important thing to understand here is **it is the reference** to each **element** in the collection. So, when we print `number`, we are printing an element of the collection `zero_to_three`. 
 
+**Undersanding indentation and blocks**: Every for loop needs to end the first line with a colon `:`. This indicates the start of the **block** of code. 
 
+The **block** is simply the code that we want executed in each iteration of our loop. So, if all we want to do is print each element, then the line that prints the element is our block. Our block is indicated by indenting. So the first line after the colon `:` should be indented. When we want to end our block, we simply stop indenting. Any code follwing the for loop will only be executed after the for loop finishes.
+```python
+iteration_count = 0
+for whatever_we_want in zero_to_three:
+    iteration_count += 1
+    print("This is iteration:", iteration_count)
+    print(whatever_we_want)
+print("The for loop is finished now! I am not in the for loop block, which is why I only printed once!")
+This is iteration: 1
+0
+This is iteration: 2
+1
+This is iteration: 3
+2
+This is iteration: 4
+3
+The for loop is finished now! I am not in the for loop block, which is why I only printed once!
+```
+To perform mutliple funtions, follow this format:
+```python
+for index in [0,1,2,3,4,5,6,7]:
+    print(index)
+    print(countries[index])
+0
+Croatia
+1
+USA
+2
+Argentina
+3
+France
+4
+Brazil
+5
+Japan
+6
+Vietnam
+7
+Israel
+#In this case we are still using the elements in the list of numbers from 0 to 7 in our for loop, but we are instead using them to access each element of another list. 
+```
+ For two lists that are ordered correctly and have information like the capital cities in one list and the the corresponding countries in another. To print them both out in the same line:
+ ```python
+ countries = ['Croatia', 'USA', 'Argentina', 'France', 'Brazil', 'Japan', 'Vietnam', 'Israel']
+cities = ['Zagreb', 'Distric of Columbia', 'Buenos Aires', 'Paris', 'Rio de Janeiro', 'Tokyo', 'Hanoi', 'Tel Aviv']
+for index in [0,1,2,3,4,5,6,7]:
+    print(cities[index]+",", countries[index])
+Zagreb, Croatia
+Distric of Columbia, USA
+Buenos Aires, Argentina
+Paris, France
+Rio de Janeiro, Brazil
+Tokyo, Japan
+Hanoi, Vietnam
+Tel Aviv, Israel
+#note that this will NOT work if your number of iterations does not match up with the size of our list.
+```
+To make sure you have the correct length of list to execute, use the **len** function!
+```python
+len(countries)
+8
+#Then create a range object:
+range(0, len(countries))
+range(0, 8)
+#And then convert this into a list:
+list(range(0, len(countries)))
+#Note that the range object is marking the starting and ending point, and excluding the end. Now this works:
+for index in list(range(0, len(countries))):
+    print(cities[index] + ",", countries[index]) #In this example, the plus sign provides the concatination of the lists.
+Zagreb, Croatia
+Distric of Columbia, USA
+Buenos Aires, Argentina
+Paris, France
+Rio de Janeiro, Brazil
+Tokyo, Japan
+Hanoi, Vietnam
+Tel Aviv, Israel
+#To add and subtract countries, we will still be iterating through our list elements.
+countries.append('Mexico')
+cities.append('Mexico City')
+for index in list(range(0, len(countries))):
+    print(cities[index] + ",", countries[index])
+```
+**Looping different datatypes**: A loop variable can represent any data type, not just an element of a list that is a number. Here's a for loop with **dictionaries**:
+```python
+example_dictionary = {'first_name': "Terrance", 'last_name': "KOAR", 'favorite_language': "Python"}
+print(example_dictionary.items())
+type(example_dictionary.items())
+#Output follows:
+dict_items([('first_name', 'Terrance'), ('last_name', 'KOAR'), ('favorite_language', 'Python')])
+dict_items
+```
+Here we can see this dict_items object looks almost like a list, but each item has two parts, the key and value. 
+```python
+#So, in our first iteration, the first key will be first_name, and the first value will be Terrance.
+for key, value in example_dictionary.items():
+    print("this is the key:", key)    
+    print("this is the value:", value, "\n")
+#In the example, the "\n" causes the paragraph breaks.
+this is the key: first_name
+this is the value: Terrance 
 
+this is the key: last_name
+this is the value: KOAR 
 
+this is the key: favorite_language
+this is the value: Python 
+```
+Output and formatting for specific information or keys from a dictionary. In this case, we're looking for First and Last name, displayed in normal formatting.
+```python
+first_name = ""
+favorite_language = ""
+#Above provides the formatting. In this case, making it standard instead of all caps.
+for key, value in example_dictionary.items():
+    if key == "last_name": 
+        last_name = value.title()
+    if key == "first_name":
+        first_name = value
+#Above section connects to the key. If you change to 'favorite_language', that will be in the output instead of 'first_name'.
+print(first_name, last_name)
+#This just tells it how to display the output.
+#Output:
+Terrance Koar
+```
+Here's a great **for loop** example!
+```python
+ice_cream_flavors = ['Mint Chocolate Chip', 'Coffee', 'Cookie Dough', 'Fudge Mint Brownie', 'Vanilla Bean']
+for ice_cream_flavor in ice_cream_flavors:
+    print('I love ' + ice_cream_flavor + ' ice cream!!')
+I love Mint Chocolate Chip ice cream!!
+I love Coffee ice cream!!
+I love Cookie Dough ice cream!!
+I love Fudge Mint Brownie ice cream!!
+I love Vanilla Bean ice cream!!
+#note the naming convention above - when the key is named 'ice_cream_flavor' in 'ice_cream_flavors' which is a universal naming convention.
+```
+PROJECT TEST 1: Your task is to assign the variable names_and_ranks to a list, with each element equal to the city name and it's corresponding rank. For example, the first element would be, "1. Buenos Aires" and the second would be "2. Toronto". Use a for loop and the lists city_indices and city_names to accomplish this. We'll need to perform some nifty string interpolation to format our strings properly. Check out f-string interpolation to see how we can pass values into a string. Remember that list indices start at zero, but we want our names_and_ranks list to start at one!
+```python
+names_and_ranks = [] #What does it mean for it to equal '[]'?
+for index in city_indices: 
+    names_and_ranks.append(f"{index + 1}. {city_names[index]}")
+ # THIS WAS DIFFICULT! I did not know the 'f' string syntax used. Also, need recall use of index, definition below, for these functions.   
+names_and_ranks
+['1. Buenos Aires',
+ '2. Toronto',
+ '3. Pyeongchang',
+ '4. Marakesh',
+ '5. Albuquerque',
+ '6. Los Cabos',
+ '7. Greenville',
+ '8. Archipelago Sea',
+ '9. Walla Walla Valley',
+ '10. Salina Island',
+ '11. Solta',
+ '12. Iguazu Falls']
+```
+**Index**: The index() method searches an element in the list and returns its index. In simple terms, index() method finds the given element in a list and returns its position. However, if the same element is present more than once, index() method returns its smallest/first position. 
 
+Reminder: Index in Python starts from 0 not 1.
 
+PROJECT TEST 2: Create a new variable called `city_populations`.  Use a `for` loop to iterate through `cities` and have `city_populations` equal to each of the populations.
+```python
+city_populations = []
+for city in cities:
+    city_populations.append(city['Population'])
+city_populations
+#What exactly is the 'append' doing here? ALSO, how did it know how to rank them?
+2891000,
+ 2800000,
+ 2581000,
+ 928850,
+ 559277,
+ 287651,
+ 84554,
+ 60000,
+ 32237,
+ 4000,
+ 1700,
+ 0]
+ ```
+Plotting the data on Plotly:
+First create a trace of our populations and set it to the variable 'trace_populations'.
 
+Note that the items below are all ones we created throughout the lesson:
+```python
+trace_populations = {'x': names_and_ranks, 
+                     'y': city_populations, 
+                     'text': names_and_ranks, 
+                     'type': 'bar', 
+                     'name': 'populations'}
 
+#Now import Plotly:
+import plotly
+plotly.offline.init_notebook_mode(connected=True)
+plotly.offline.iplot([trace_populations])
+#looks like the only thing that changes here is the final item, in this case pulling on the 'trace_populations' which we set above.
+```
+FUNCTIONS!!!
+
+Here's an example of converting some loop code into a function. Start with the regular for loop:
+```python
+#Here's the data set:
+new_employees = ['steven', 'jan', 'meryl']
+#Here's the code for a welcome message to those new employees
+welcome_messages = []
+for new_employee in new_employees:
+    welcome_messages.append("Hi " + new_employee.title() + ", I'm so glad to be working with you!" )
+    
+welcome_messages
+["Hi Steven, I'm so glad to be working with you!",
+ "Hi Jan, I'm so glad to be working with you!",
+ "Hi Meryl, I'm so glad to be working with you!"]
+```
+Now make it into a function:
+```python
+def greet_employees():
+    welcome_messages = []
+    for new_employee in new_employees:
+        welcome_messages.append("Hi " + new_employee.title() + ", I'm so glad to be working with you!" )
+
+    return welcome_messages
+```
+**There are two steps to using a function:**
+
+1: **Define**(or Declare): Defining a function happens first, more on this below. In this example, it was def greet_employees()
+
+2: **Execute**: Executing a function is fairly simple, just type the function's name followed by parentheses. Now when we call greet_employees() we execute the function. 
+
+**Now if some new employees arrive, I can just execute the function I defined:**
+```python
+new_employees = ['Jan', 'Joe', 'Avi']
+greet_employees()
+["Hi Jan, I'm so glad to be working with you!",
+ "Hi Joe, I'm so glad to be working with you!",
+ "Hi Avi, I'm so glad to be working with you!"]
+ ```
+**Declaring a Function**: There are two components to declaring a function: the **function signature** and the **function body**.
+
+**Function Signature**: The function signature is the first line of the function. It follows the pattern of def, function name, parentheses, colon.
+```python
+def name_of_function():
+```
+_The def is there to tell Python that you are about to declare a function. The name of the function indicates how to reference and execute the function later. The colon is to end the function signature and indicate that the body of the function is next. The parentheses are important as well, and we'll explain their use in a later lesson._
+
+**Function Body**:
+The body of the function is what the function does. This is the code that runs each time we execute the function. We indicate that we are writing the function body by going to the next line and indenting after the colon. To complete the function body we stop indenting.
+```python
+def name_of_function(): 
+    words = 'function body' # function body
+# no longer part of the function body
+```
+Here's the full function, with return statement to produce the desired output.
+```python
+def greet_employees(): # function signature
+    welcome_messages = [] # begin function body
+    for new_employee in new_employees:
+        welcome_messages.append("Hi " + new_employee.title() + ", I'm so glad to be working with you!" )
+
+    return welcome_messages # return statement
+
+# no longer in function body
+```
+Function Practice: Write amfunction which iterates through the list of destinations and capitalizes the first letter of each word. It should return a list of capitalized destinations.
+```python
+travel_destinations = ['argentina', 'mexico', 'italy', 'finland', 'canada', 'croatia']
+def capitalize_countries():
+    travel_destinations = []
+    for travel_destination in travel_destinations:
+      travel_destinations.append(travel_destination.title())
+    pass
+```
+**Return Statements:**
+Variables declared inside a function cannot be retreived globally unless you are using a return statement. The example below shows how this plays out:
+```python
+def return_full_name():
+    first_name = 'bob'
+    last_name = 'smith'
+    full_name = first_name + ' ' + last_name
+    return full_name
+return_full_name()
+'bob smith'
+
+'Hello ' + return_full_name()
+'Hello bob smith'
+```
+**Predictability with arguments**:
+
+**dependencies**: When code requires something to work, we call that something a dependency. 
+
+Example: This function requires a dependency that is not present. We have not yet defined 'traveller' variable.
+
+```python
+
+def meet_traveller(): 
+    welcome_message = "Hi " + traveller.title() + ", I'm so glad we'll be going on the trip together!"
+    return welcome_message # return statement
+
+NameError: name 'traveller' is not defined
+```
+Let's try the same function, with 'traveller' better defined.
+```python
+def meet(traveller): 
+    welcome_message = "Hi " + traveller.title() + ", I'm so glad we'll be going on the trip together!"
+    return welcome_message
+meet()
+#In the code above we changed the first line of the function, the function signature, to the following:
+
+def meet(traveller):
+
+#This tells us, and Python, to not even run the code unless the proper data to the function is provided
+```
+By using an **argument**, the function signature tells us how to run this function. We refer to the function by it's name and then pass through a string representing the 'traveller'.
+
+Quick Dictionaries reminder:
  
- 
+ Look at the keys of a dictionary to quickly view the attributes of that dictionary.
+```python
+fork_fig.keys()
+#'fork_fig' is a yelp review for a restarant. This reveals:
+dict_keys(['categories', 'coordinates', 'display_phone', 'distance', 'id', 'image_url', 'is_closed', 'location', 'name', 'phone', 'price', 'rating', 'review_count', 'transactions', 'url'])
+```
+To check if keys between two dictionaries are the same (and thus comparible):
+```python
+fork_fig.keys() == frontier_restaurant.keys()
+True
+```
+Write a function called restaurant_name that, provided a dictionary representing a restaurant like you saw above, returns that restaurant's name.
+```python
+def restaurant_name(restaurant):
+    return restaurant['name']
+```
+Now for restaurant rating. This is good practice with **dictionaries** and **functions**.
+```python
+def restaurant_rating(restaurant):
+    return restaurant['rating']
+```
+**Comparing statements**:
+
+Now let's write a function called is_better that returns True if a restaurant has a higher rating than an alternative restaurant. The first argument should be called restaurant and the second argument should be called alternative. The function returns False if the two ratings are equal.
+```python
+def is_better(restaurant, alternative):
+    if restaurant['rating'] > alternative['rating']:
+        return True
+    return False
+#What exactly does the indentation here mean? In this example, 'True' if higher rating, 'False' if the same rating
+```
+In the one below, returns True if a restaurant has a lower price, that is the restaurant has fewer '$' signs. The function returns False if the two prices are equal.
+
+Because the 'price' is determined in '$-$$$', used 'len' of the price string.
+```python
+def is_cheaper(restaurant, alternative):
+    if len(restaurant['price']) < len(alternative['price']):
+        return True
+    return False
+#output
+is_cheaper(fork_fig, frontier_restaurant)
+False
+```
+Testing greater or equal to a specific number, in this case a rating:
+```python
+def high_rating(restaurant, rating):
+    if restaurant['rating'] >= rating:
+        return True
+    return False
+    pass
+#output
+high_rating(fork_fig, 4)
+True
+```
+**If Statement and Execution Flow**:
+
+The **+=** is used to increment. consider:
+
+```python
+vacation_days = 0
+vacation_days += 1
+vacation_days += 1
+vacation_days
+#output
+2
+```
+The statement vacation_days += 1 can be thought of as vacation_days = vacation_days + 1. 
+
+On line 2, vacation_days is 0. Then we reassign vacation_days to equal the previous value of vacation_days, which is 0, plus 1. 
+
+Again we increment vacation_days on line 3, which would now equate to 1 + 1, 
+
+and finally we output the new value of vacation_days, 2.
+```python
+vacation_days = 1
+if False:
+    # code does not run as conditional argument False
+    vacation_days += 1
+vacation_days
+1
+#Since the condition following the if equals False, the code directly underneath is not run. Vacation_days stays assigned to the number 1.
+```
+Here, see how the indentation tell the function when it is conditional:
+```python
+vacation_days = 1
+if False:
+    # if block begins
+    vacation_days += 1
+# if block ends
+vacation_days += 2
+vacation_days
+3
+#So in the above cell, the last two lines are run because they are not part of the if block.
+```
+When the conditional argument is True, the code in the conditional block does run.
+```python
+vacation_days = 1
+if True:
+    # code in if block runs, as True
+    vacation_days += 1
+vacation_days
+2
+```
+**Code that sometimes runs:**
+```python
+def long_vacation(number_of_days):
+    if number_of_days > 4:
+        return 'that is a long vacation'
+long_vacation(5)
+'that is a long vacation'
+long_vacation(3)  
+#Our if argument is the expression number_of_days > 4, which sometimes evaluates to True and sometimes False, it depends on the number of days.
+```
+**When something is True do one thing, and when not True do something else.**
+```python
+def vacation_length(number_of_days):
+    if number_of_days > 4:
+        return 'that is a long vacation'
+    else:
+        return 'not so long'
+vacation_length(3) 
+'not so long'
+vacation_length(5)
+ 'that is a long vacation'
+ ```
+ **Truthiness and falsiness**:  
+ Conditionals also consider some values True if they are truthy and False if they are falsy. Take a look at the following:
+ ```python
+ vacation_days = 1
+if vacation_days:
+    # this is run
+    vacation_days += 1
+vacation_days
+2
+#Even through vacation_days did not equal True above, it still ran the code in the if block because the value for vacation_days was 1, which is considered truthy.
+```
+What is and isn't truthy?
+
+**Zero** is falsy, and **None** is falsy. Also falsy is anything where len of that thing returns False, so '', [] are both falsy. Let's see that.
+```python
+#Here's that last example:
+greeting = ''
+if greeting:
+    greeting += 'Hello'
+else:
+    greeting += 'Goodbye'
+greeting
+
+'Goodbye'
+```
+To know if something is truthy or falsy, use a Bool test:
+```python
+bool(0) 
+false
+bool(1)
+true
+```
+**Conditionals in Loops**
+```python
+greetings = ['hello', 'bonjour', 'hola', 'hallo', 'ciao', 'ola', 'namaste', 'salam']
+
+def starts_with_h(words):
+    selected = []
+    for word in words:
+        if word.startswith('h'):
+            selected.append(word)
+    return selected 
+
+starts_with_h(greetings)
+['hello', 'hola', 'hallo']
+```
+The above starts_with_h function uses a for loop to move through the list of words one by one. 
+
+For each word, it checks if the word starts with h and if it does, it adds that word to the selected list. 
+
+Finally, the function returns that list of selected elements. So by using the for loop combined with if we can choose elements of a list based on a specific criteria.
+
+
+
+More on **Conditionals**: Writing functions with conditionals
+
+Let's write a function called better_restaurant that provided two restaurants, returns the restaurant with the better rating. The first argument is restaurant and the second argument is alternative.
+```python
+def better_restaurant(restaurant, alternative):
+    if restaurant['rating'] > alternative['rating']:
+        return restaurant
+    return alternative
+print(better_restaurant(frontier_restaurant, fork_fig)['name']) # 'Fork & Fig'
+print(better_restaurant(fork_fig, frontier_restaurant)['name']) # 'Fork & Fig'
+```
+Let's write a function called cheaper_restaurant that returns the restaurant with the lower price, that is the restaurant that has fewer '$' signs. The first argument should be named restaurant and the second argument should be named alternative.
+```python
+def cheaper_restaurant(restaurant, alternative):
+    if len(restaurant['price']) < len(alternative['price']):
+        return restaurant
+    return alternative
+ print(cheaper_restaurant(fork_fig, frontier_restaurant)['name'])
+#output
+Frontier Restaurant
+```
+Test: Let's continue our work of conditionals by seeing how they can be combined with loops. Let's write a function called open_restaurants that takes in a list of restaurants as an argument and returns a list of only the restaurants that are not closed.
+```python
+def open_restaurants(restaurants):
+    selected = []
+    for restaurant in restaurants:
+          if restaurant['is_closed'] == False:
+            selected.append(restaurant)
+    return selected
+open_restaurants(restaurants)[0]['name']
+'Fork & Fig'
+```
+
