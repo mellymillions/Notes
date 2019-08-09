@@ -918,4 +918,241 @@ def open_restaurants(restaurants):
 open_restaurants(restaurants)[0]['name']
 'Fork & Fig'
 ```
+First solve it for one element
+Before determining how to categorize all elements in a list, let's just answer the question of whether one element is even. We can do so by making use of the modulo operator, %. The % returns the **remainder** resulting from dividing a number by another. For example:
+```python
+7 % 3
+1
+#7 divided by 3 is 2, with a remainder of 1, which is the output here.
+6%3
+0
+#When it divides evenly, there is no remainder so the output is 0.
+```
+Note that the above line effectively asks (and answers) whether 4 is even. This is because the statement 4 % 2returns a zero, which means that four divided by two has a remainder of zero, and as we know, any number that is divisible by two with no remainder leftover is an even number.
+
+**Even and Odd**
+Note that the above line effectively asks (and answers) whether 4 is **even**. 
+Similarly, if a number is **odd**, then dividing by the number two results in a remainder of one.
+```python
+def is_even(number):
+    return number % 2 == 0
+print(is_even(3)) # False
+print(is_even(100)) # True
+False
+True
+```
+Here’s a function:
+```python
+def select_even(elements):
+    selected = []
+    for element in elements:
+        if is_even(element):
+            selected.append(element)
+    return selected
+
+numbers = list(range(0, 11))
+numbers
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+select_even(numbers)
+[0, 2, 4, 6, 8, 10]
+```
+**Returning a subset of elements that meet a specific criteria is something commonly done in Python.** And the procedure looks pretty much the same regardless of what we are selecting. For example, let's now select words that end with 'ing'.
+```python
+#What exactly is this section at the top? Why would you not be able to start with the function below?
+def ends_ing(word):
+    return word.endswith('ing')
+
+def select_ing(elements):
+    selected = []
+    for element in elements:
+        if ends_ing(element):
+            selected.append(element)
+    return selected
+
+words = ['camping', 'biking', 'sailed', 'swam']
+select_ing(words)
+['camping', 'biking']
+```
+Notice that our two functions **select_ing** and **select_even** share a lot of similarity. Below, let's just highlight the differences.
+```python
+def select_ing(elements):
+#     selected = []
+#     for element in elements:
+        if ends_ing(element):
+#             selected.append(element)
+        #return selected
+
+def select_even(elements):
+#     selected = []
+#     for element in elements:
+        if is_even(element):
+#             selected.append(element)
+# return selected
+```
+Essentially, the only thing different between the functions is the criteria of how we are selecting. The **filter()** function allows us to filter for specific elements, so long as it knows the criteria and the elements.
+
+The filter() function returns an iterator where the items are filtered through a function to test if the item is accepted or not.
+The general syntax of a filter() function is given as:
+```python
+filter ( function, iterable )
+```
+Apply this to filter the even numbers as we did above with a condition and loop:
+```python
+filter(is_even,numbers) #filter ( function, iterable )
+<filter at 0x7f89f44e6a20>
+#This doesnt really mean anything. It needs to be coerced by a list in order to produce a meaningful result:
+list(filter(is_even, numbers))
+[0, 2, 4, 6, 8, 10]
+```
+The filter function takes two arguments, the first is the function itself. The function goes through each element, and passes that element into the criteria function. 
+If that criteria function returns a truthy value, the element is selected. 
+If not, the element is not selected.
+**Note that when passing through the function, no parentheses are added at the end of the function. This is important. If we pass through the parentheses the filtering will not occur.
+
+**Filter WITHOUT a Function**
+Passing the list to the filter without supplying a first argument
+```python
+random_list = [0,'0','python', 2, True, 'flatiron', False, 38.9]
+```
+Our random_list above contains a number of different data types. Let's pass this list through function()and use None for filter function.
+```python
+list(filter(None, random_list))
+['0', 'python', 2, True, 'flatiron', 38.9]
+#filter function as None, the function defaults to Identity function i.e. each element in random_list is checked to see if it is true or not. So in the output, we only get the elements which are true. Numbers and strings are always true (this includes '0' as a string), whereas 0 and False return a False value and hence are not included in the output.
+```
+**Map with Python**
+Use the map function not to return a subset of elements, but to alter each element in a similar manner.
+```python
+#list of names
+names = ['Homer', 'Marge', 'Bart', 'Maggie', 'Lisa']
+```
+We would like to add the name Simpson to the end of each name. Just as we did with filter, we can start by writing a function that solves the problem for one element.
+```python
+#In this example, HOW  does it know to call upon the ‘name’ list above??
+def add_simpson(name):
+    return name + " Simpson"
+add_simpson("Homer")
+'Homer Simpson'
+#our method add_simpson successfully takes in a string, name, and returns that string with the added last name, Simpson.
+```
+Solve for all: iterate through the names one by one, and for each name we perform the same operation -- add the last name "Simpson".
+```python
+#Does it need this section to work? I’ve added it in here. I assume that this means it can 
+def add_simpson(name):
+    return name + " Simpson"
+
+#Here is the function
+def add_simpsons(elements):
+    altered = []
+    for element in elements:
+        altered.append(add_simpson(element))
+    return altered
+```
+Let's write a function that derives the initials of each person's name.
+```python
+def find_initial(name): # name = 'Michael Prude'
+    names = name.split(' ') # ['Michael', 'Prude']
+    first_name = names[0] #'Michael'
+    last_name = names[1] # 'Prude'
+    return first_name[0] + last_name[0] # 'M' + 'P'
+  
+homer = simpsons[0]
+find_initial(homer)
+'HS'
+```
+And to apply it to the whole list:
+```python
+def find_initials(elements):    
+    altered = []
+    for element in elements:
+        altered.append(find_initial(element))
+    return altered
+
+find_initials(simpsons) 
+['HS', 'MS', 'BS', 'MS', 'LS']
+```
+Again, Our two functions, are quite similar.
+```python
+def add_simpsons(elements):
+#     altered = []
+#     for element in elements:
+        altered.append(add_simpson(element))
+#     return altered
+
+def find_initials(elements):    
+#     altered = []
+#     for element in elements:
+        altered.append(find_initial(element))
+#     return altered
+```
+**Map Function**: The map function allows us to apply the same operation to each element and return a new list of elements receiving the modified elements from this operation.
+
+A map() function is defined in python like this:
+```python
+map(Function, Sequence)
+```
+Just as the filter function returns a filter object, the map function returns a map object. 
+
+In order to get our desired list back, we need to coerce the map object to a list:
+```python
+list(map(add_simpson, names))
+['Homer Simpson',
+ 'Marge Simpson',
+ 'Bart Simpson',
+ 'Maggie Simpson',
+ 'Lisa Simpson']
+ ```
+ OR:
+ ```python
+ list(map(find_initial, simpsons))
+ ['HS', 'MS', 'BS', 'MS', 'LS']
+ ```
+The **pow** built-in python function takes in two numbers as arguments and calculates the result by setting second number as power of first number. 
+```python
+pow(2,4)
+16
+
+#another example:
+
+list(map(pow, [2, 4, 8], [3, 5, 7]))
+[8, 1024, 2097152]
+```
+Summary of Map:
+Map function which takes in two arguments.
+
+ The **first argument** is the altering function, which operates on each element by passing through the element as an argument and returning a value. 
+ 
+ The **second argument** is the list of elements to be iterated through and operated on. 
+ 
+ The return values of the altering function are appended to a new list, which is returned after we coerce our map object into a list.
+
+ **Practice**
+ ```python
+ def extract_name(thing_with_a_name):
+    return thing_with_a_name['name']
+
+names = list(map(extract_name, restaurants))
+names
+# ['Fork & Fig',
+#  'Salt And Board',
+#  'Frontier Restaurant',
+#  'Nexus Brewery',
+#  "Devon's Pop Smoke",
+#  'Cocina Azul',
+#  'Philly Steaks',
+#  'Stripes Biscuit']
+```
+OR: For review counts:
+```python
+def extract_review(review):
+    return review['review_count']
+        
+review_counts = list(map(extract_review, restaurants))
+review_counts
+[610, 11, 1373, 680, 54, 647, 25, 20]
+```
+
+
+
 
