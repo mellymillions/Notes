@@ -1152,6 +1152,137 @@ review_counts = list(map(extract_review, restaurants))
 review_counts
 [610, 11, 1373, 680, 54, 647, 25, 20]
 ```
+TIPS! Using the socks@
+
+```python
+def pillow_doubler(sock):
+    return sock * 2
+
+def double_socks(list_of_socks):
+    # map(function_to_apply_to_each_item, list_of_items)
+    return list(map(lambda sock: pillow_doubler(sock), list_of_socks))
+
+sock_list = [1,2,3]
+double_socks(sock_list)
+
+2,4,6
+```
+More Python Work:
+
+Write a function called get_boundaries() that takes in two parameters, a number called target and a number called margin.
+
+Call the function on the target 100 with a margin of 20. Save the returned values to variables called low and high.
+```python
+
+def get_boundaries(target, margin):
+  low_limit = target - margin
+  high_limit = margin + target
+  return low_limit, high_limit
+
+#This is another way to call the function:
+low, high = get_boundaries(100,20)
+print(low)
+print(high)
+80
+120
+```
+**Using range in for loops**
+
+Notice that we need to iterate through a list of length 3, but we don’t care what’s in the list. To create these lists of length n, we can use the range function. range takes in a number n as input, and returns a list from 0 to n-1.
+```python
+zero_thru_five = range(6)
+# zero_thru_five is now [0, 1, 2, 3, 4, 5]
+zero_thru_one = range(2)
+# zero_thru_one is now [0, 1]
+
+for i in range(3):
+  print("WARNING!")
+#which will print WARNING! three times
+```
+Example:
+```python
+promise = "I will not chew gum in class"
+
+for i in range(5):
+	print(promise)
+I will not chew gum in class
+I will not chew gum in class
+I will not chew gum in class
+I will not chew gum in class
+I will not chew gum in class
+```
+Infinite Loops:
+```
+Append in for loops
+```python
+students_period_A = ["Alex", "Briana", "Cheri", "Daniele"]
+students_period_B = ["Dora", "Minerva", "Alexa", "Obie"]
+
+for student in students_period_A:
+  students_period_B.append(student)
+  print(student)
+  
+print(students_period_B)
+```
+Break in for loops
+
+You can stop a for loop from inside the loop by using break. When the program hits a break statement, control returns to the code outside of the for loop. For example:
+```python
+items_on_sale = ["blue_shirt", "striped_socks", "knit_dress", "red_headband", "dinosaur_onesie"]
+
+print("Checking the sale list!")
+for item in items_on_sale:
+  print(item)
+  if item == "knit_dress":
+    break
+print("End of search!")
+#output
+Checking the sale list!
+blue_shirt
+striped_socks
+knit_dress
+End of search!
+```
+Another example of break:
+```python
+dog_breeds_available_for_adoption = ['french_bulldog', 'dalmatian', 'shihtzu', 'poodle', 'collie']
+dog_breed_I_want = 'dalmatian'
+
+for dog in dog_breeds_available_for_adoption:
+  print(dog)
+  if dog == dog_breed_I_want:
+  	break
+print("They have the dog I want!")
+french_bulldog
+dalmatian
+They have the dog I want!
+```
+Dictionary notes:
+Notice that:
+
+1. A dictionary begins and ends with curly braces ({ and }).
+
+2. Each item consists of a key (i.e., “oatmeal”) and a value (i.e., 3)
+
+3. Each key: value pair (i.e., "oatmeal": 3 or "avocado toast": 6) is separated by a comma (,)
+
+4. It’s considered good practice to insert a space () after each comma, but your code will still run without the space.
+
+Dictionaries provide us with a way to map pieces of data to each other, so that we can quickly find values that are associated with one another.
+```
+Nested Loops:
+```python
+#I have a dictionary called 'users'
+
+def get_street(list_of_users):
+  streets_list = []
+  for person in list_of_users:
+    streets_list.append(person['address']['street'])
+  return streets_list
+
+print(get_street(users))
+['Park Place', 'Nowhere', 'The north pole']
+```
 
 
 
