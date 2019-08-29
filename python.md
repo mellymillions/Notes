@@ -1283,6 +1283,93 @@ def get_street(list_of_users):
 print(get_street(users))
 ['Park Place', 'Nowhere', 'The north pole']
 ```
+Dictionaries: Adding two dictionaries together
+
+```python
+names = ['Jenny', 'Alexus', 'Sam', 'Grace']
+heights = [61, 70, 67, 64]
+
+students = {key:value for key, value in zip(names, heights)}
+#students is now {'Jenny': 61, 'Alexus': 70, 'Sam': 67, 'Grace': 64}
+
+```
+Remember that **zip()** combines two lists into a list of pairs. This list comprehension:
+
+1. Takes a pair from the zipped list of pairs from names and heights
+2. Names the elements in the pair key (the one originally from the names list) and value (the one originally from the heights list)
+3. Creates a key : value item in the students dictionary
+4. Repeats steps 1-3 for the entire list of pairs
+
+
+When retrieving a collection of information about a dictionary. Use the appropriate dictionary function to return a list of values in the dictionary regarding Pyeongchang. Assign the list to the variable pyeongchang_values.
+```python
+
+pyeongchang_values = list(cities[11].values())
+
+print(pyeongchang_values) 
+['PyeongChang', 'South Korea', 2581000, 3194]
+
+type(pyeongchang_values) # list
+```
+A **trace** is a dictionary! 
+
+used for Plotly
+
+```python
+trace = {'x': [], 'y': [], 'text': [], 'type': 'bar'}
+```
+More practice with Dictionaries:
+```python
+users = [
+  {
+    'id': 1,
+    'email': 'devilchick182@hotmail.com',
+    'address': {
+      'street': 'Park Place',
+      'number': 123
+    },
+    'age': 10
+  },
+  {
+    'id': 3,
+    'email': 'sporkler@biz.co',
+    'address': {
+      'street': 'Nowhere',
+      'number': 100000000
+    },
+    'age': 99,
+  },
+  {
+    'id': 2,
+    'email': 'surfingbear10@chillers.bro',
+    'address': {
+      'street': 'The north pole',
+      'number': 55
+    },
+    'age': 3
+  },
+]
+
+bear = users[2]
+print(bear)
+
+melissa = users[0]
+print(melissa)
+
+melissa_email = users[0]['email']
+print(melissa_email)
+
+boring_person_address = users[1]['address']
+print(boring_person_address)
+
+melissa_values = list(users[0].values())
+print(melissa_values)
+
+melissa_keys = list(users[0].keys())
+print(melissa_keys)
+```
+
+
 
 
 
