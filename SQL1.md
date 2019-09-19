@@ -1,3 +1,11 @@
+**SQL Overview:** What type of language is it?
+
+It's a declarative language. OOP and procedural styles are called imperative.
+
+**The key difference is in SQL you declare what you want to happen, but not how it's done. There are no loops or conditional statements - just filters and operations on data as a whole.**
+
+In OOP or procedural, you have to spell out **how** each action is done.
+
 Querying a basic database using 'AND', 'OR':
 ```sql
 CREATE TABLE songs (
@@ -31,7 +39,7 @@ SELECT title FROM songs WHERE mood = "epic" OR released > 1990;
 
 SELECT title FROM songs WHERE mood = "epic" AND released >1990 AND duration <240;
 ```
-Subqueries and 'IN':
+**Using subqueries and 'IN':**
 ```sql
 CREATE TABLE exercise_logs
     (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,7 +82,7 @@ SELECT * FROM exercise_logs WHERE type IN (
 SELECT * FROM exercise_logs WHERE type IN (
     SELECT type FROM drs_favorites WHERE reason LIKE "%cardiovascular%");
 ```
-Nested Queries:
+**Using Nested Queries:**
 ```sql
 CREATE TABLE artists (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

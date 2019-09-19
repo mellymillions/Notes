@@ -125,5 +125,4 @@ def get_streets(list_of_users):
   return streets_list
 
 print(get_streets(users))
-
 ```
