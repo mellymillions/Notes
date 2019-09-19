@@ -1121,3 +1121,297 @@ df_dy(two_x_cubed_y_plus_three_y_x_plus_x)
 [(2, 3, 0), (3, 1, 0), (1, 1, -1)]
 ```
 THAT IS HOW YOU GET THE DERIVATIVE OF A MUTLIVARIABLE FUNCTION!!!!!!
+
+
+
+# Linear Regression
+
+## Single variable Regression
+
+Where:
+
+y = dependent variable
+
+m = slope
+
+x = input variable
+
+b = y intercept
+
+Full single linear regression equation:
+**y = mx+b**
+
+Using Python:
+```python
+def y(x):
+    return m*x + b
+
+print y(x) #For any input of  x  our function returns the value of  y  along that line.
+```
+## Calculating Slope
+
+**Rise over run**. We can determine the slope by taking any two points along the line and looking at the ratio of the vertical distance travelled to the horizontal distance travelled. 
+
+
+Given a beginning point  (x0,y0) and an ending point  (x1,y1) along any segment of a straight line, the slope of that line  m  equals the following:
+
+Full slope equation: **m=(y1−y0)/(x1−x0)**
+
+In python:
+```python
+def slope(x_values, y_values):
+    return (y_values[1]-x_values[1])/(y_values[0]-x_values[0])
+```
+
+## Calculating Y-Intercept
+
+First, let's figure out the slope of our line.
+
+Then plug in our value of  m  into our formula.
+
+Full y-intercept equation: **y=3x+b**
+
+**LAB**
+
+The comedy show is trying to figure out how much money to spend on advertising in the student newspaper. The newspaper tells the show that
+
+1. For every two dollars spent on advertising, three students attend the show.
+
+2. If no money is spent on advertising, no one will attend the show.
+
+Write a linear regression function called attendance that shows the relationship between advertising and attendance expressed by the newspaper.
+
+m = 3/2 (3 students / $2 on advertising) 
+
+b = 0 (because $0 advertising = 0 attendees)
+
+```python
+def attendance(advertising):
+    return (3/2)*advertising + 0
+
+attendance(100) # 150
+```
+When the advertising budget is zero, 20 friends still attend
+Three additional people attend the show for every two dollars spent on advertising.
+
+The additional 20 friends is the y-intercept, which is now 20.
+```python
+def attendance(advertising):
+    return (3/2)*advertising + 20
+
+attendance(100) # 170
+```
+PLOT IT!
+
+initial_sample_budgets = [0, 50, 100]
+
+attendance_values = [20, 95, 170]
+
+First we **import the necessary plotly library**, and **graph_obs function**, and setup plotly to be used without uploading our plots to its website.
+
+Finally, we plot out our regression line using our attendance_with_friends function. 
+
+Our x values will be the budgets. 
+
+For our y values, we need to use our attendance_with_friends function to create a list of y-value attendances for every input of x.
+```python
+import plotly
+from plotly import graph_objs
+plotly.offline.init_notebook_mode(connected=True)
+
+trace_of_attendance_with_friends = graph_objs.Scatter(
+    x=initial_sample_budgets,
+    y=attendance_values,
+)
+
+plotly.offline.iplot([trace_of_attendance_with_friends])
+
+#run it, output
+trace_of_attendance_with_friends
+Scatter({
+    'x': [0, 50, 100], 'y': [20, 95, 170]
+})
+```
+DONE!
+
+## Functions for Linear Regression
+
+Now let's write a couple functions that we can use going forward. 
+
+We'll write a function called m_b_data that give:
+1. a slope of a line (m)  
+2. a y-intercept (b) 
+3. will return a dictionary that has a key of (x) pointing to a list of x_values
+4. a key of y that points to a list of y_values. 
+
+Each  y  value should be the output of a regression line for the provided  m  and  b  values, for each of the provided x_values.
+```python
+def m_b_data(m, b, x_values):
+    y_values = list(map(lambda x: m*x + b, x_values))
+    return {'x': x_values, 'y': y_values}
+
+m_b_data(1.5, 20, [0, 50, 100]) 
+# {'x': [0, 50, 100], 'y': [20.0, 95.0, 170.0]}
+```
+Now let's write a function called **m_b_trace** that uses our **m_b_data** function to return a dictionary that includes keys of name and mode in addition to x and y. 
+
+The values of mode and name are provided as arguments. When the mode argument is not provided, it has a default value of **lines** and when name is not provided, it has a default value of **line function**.
+```python
+def m_b_trace(m, b, x_values, mode = 'lines', name = 'line function'):
+    values = m_b_data(m, b, x_values)
+    values.update({'mode': mode, 'name': name})
+    return values
+
+m_b_trace(1.5, 20, [0, 50, 100]) 
+{'x': [0, 50, 100],
+ 'y': [20.0, 95.0, 170.0],
+ 'mode': 'lines',
+ 'name': 'line function'}
+ ```
+
+**LAB**
+```python
+first_show = {'budget': 200, 'attendance': 400}
+second_show = {'budget': 400, 'attendance': 700}
+
+def marginal_return_on_budget(first_show, second_show):
+    return (second_show['attendance'] - first_show['attendance'])/(second_show['budget'] - first_show['budget'])
+```
+Define a **slope function**:
+```python
+def slope(x_values, y_values):
+    return (y_values[1]-x_values[1])/(y_values[0]-x_values[0])
+    pass
+```
+OR!!
+```python
+def slope(x_values, y_values):
+    sorted_values = sorted_points(x_values, y_values)
+    x1 = sorted_values[0][0]
+    y1 = sorted_values[0][1]
+    x2 = sorted_values[-1][0]
+    y2 = sorted_values[-1][1]
+    m = (y2 - y1)/(x2 - x1)
+    return m
+```
+Now write a function called **y_intercept:** 
+
+Use the slope function to calculate the slope if it isn't provided as an argument. Then we will use the slope and the values of the point with the highest x value to return the y-intercept.
+```python
+def y_intercept(x_values, y_values, m = None):
+    sorted_values = sorted_points(x_values, y_values)
+    highest = sorted_values[-1]
+    if m == None:
+        m = slope(x_values, y_values)
+    offset = highest[1] - m*highest[0]
+    return offset
+```
+Now write a function called **build_starting_line** that given a list of x_values and a list of y_values returns:
+1.  a dictionary with a key of m 
+2.  a key of b to return the m and b values of the calculated regression line. 
+
+Use the slope and y_intercept functions to calculate the line.
+```python
+def build_starting_line(x_values, y_values):
+    sorted_values = sorted_points(x_values, y_values)
+    highest = sorted_values[-1]
+    lowest = sorted_values[0]
+    m = slope(x_values, y_values)
+    b = y_intercept(x_values, y_values, m)
+    return {'m': m, 'b': b}
+```
+Now, put them all together into the full equation!
+```python
+def expected_value_for_line(m, b, x_value):
+    return m*x_value + b
+```
+PLOT IT! 
+
+As we can see above, we built a "starting" regression line out of the points with the lowest and highest x values. We will learn in future lessons how to improve our line so that it becomes the "best fit" given all of our dataset, not just the first and last points. For now, this approach sufficed since our goal was to practice working with and plotting line functions.
+
+# Evaluation of Regression Lines
+
+**Series and Summations**
+
+One of the nice things about data science is that it allows us to explore the symmetry between mathematics and coding. We saw this with translating equations into functions. For example, we have now seen how to translate something like this:  
+
+y=1.3x+20
+
+into code like this:
+```python
+def y(x):
+    return 1.3*x + 20
+```
+**Sequences in code** OR **Sigma Notation**
+
+Consider this list:
+```python
+my_list = [1, 6, 11, 16, 21]
+```
+Looking at the numbers above, you can see that these numbers start at one and increment by five for every number. So below we generate these numbers with code, and also use code to express how these numbers increment.
+```python
+initial_i = 0
+ending_i = 4
+
+terms = []
+for i in range(initial_i, ending_i + 1):
+    current_element = 5*(i) + 1
+    terms.append(current_element)
+terms
+```
+Our code above expresses a pattern in the numbers:
+
+1. initialize a number (our index) at zero
+2. increase the index until it reaches four
+3. Each element in the list equals  5∗i+1 for the index 0 up to and including 4
+
+**Sequences in math**
+In Python we call this ordered collection a **list**. In math, an ordered list of numbers is called a **sequence**. 
+
+We express sequences not with [], but with parentheses or curly brackets. For example:
+
+(1, 6, 11, 16, 21) or
+{1, 6, 11, 16, 21}
+
+Each component of a sequence is called an element, or a term. So in our sequence above, 1 is a term, as is 6 and 21.
+
+CONSIDER: (xi)4 as i=0  where  xi=5∗i+1
+
+Read the above line as the following: 
+1. A sequence of numbers
+2. from the indices of 0 to 4 (i=0 being the starting point of the range/indices and 4 being the stopping point)
+3. where  sum of xi or Sigma equals 5∗i+1 (meaning this equation is applied to each number in the sequence, then summed)
+
+Again, this gives us {1, 6, 11, 16, 21}
+
+In describing a sequence in math, the initial index is placed at the bottom, and the stopping point at the top. And the common term for the sequence is also described.
+
+**A mathematical series**
+(xi)4 i=0 where xi=5∗i+1=1+6+11+16+21=55
+
+Let's see how we would write something like this using Python. Here is the sequence that we previously generated written another way. 
+
+Python's range function can accept a third argument, **which tells it how much to increment each element**. In other words, we start at 1, increment each element by 5, then stop at 21 because 26 < 22 is False.
+```python
+num_range = list(range(1, 22, 5))
+num_range
+
+#[1, 6, 11, 16, 21]
+```
+Now to turn this into a series, we just add up those terms
+```python
+total = 0
+for i in num_range:
+    total += i
+total
+
+#55
+```
+Or we can use Python's built-in sum function to add up the elements in num_range.
+```python
+num_range
+sum(num_range)
+
+#55
+```
+All this is the same as using SIGNA NOTATION!!

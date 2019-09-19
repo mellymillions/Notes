@@ -1663,11 +1663,146 @@ train_work = (get_work(train_mass, train_acceleration, train_distance))
 
 print("The GE train does " + str(train_work) + " Joules of work over " + str(train_distance) + " meters.")
 ```
+# Allow or Don't Allow - using IF and ELSE
 
+```python
+banned_users = ['Melissa', 'Michael', 'Ted', 'Mari', 'Eyeball Monster']
+user = 'Unbridled Optimism Monster'
 
- 
- 
- 
+if user not in banned_users:
+		print(f"{user.title()}, do whatever the fuck you want!!!!")
+else: 
+		print(f"{user.title()}, get OUT of here you jerk!!!")
+
+#Unbridled Optimism Monster, do whatever the fuck you want!!!!
+```
+Another example of IF, ELIF, ELSE:
+```python
+print("This is how cool you are at every age:")
+age = 40
+
+if age <5:
+  price = 0
+  print("You literally don't care and you're too young still to be cool.")
+elif age <10:
+  price = .50
+  print("If you own a video game console you're cool.")
+elif age <14:
+  price = 7
+  print("Have you ever gotten drunk? No? Not cool.")
+elif age <20:
+  price = 60
+  print("You are a teenager. Pretty much cool by definition.")
+else:
+  price = 50000
+  print("It is all downhill from here coolness wise.")
+
+print(f"It will cost you ${price} to be cool at that age.")
+```
+Showing all the options using IF, ELSE!
+```python
+alien_colors = ["silver glitter", "green slime", "matte black sandpapery", "lumpy booger"]
+
+for alien_color in alien_colors:
+	if alien_color == "matte black sandpapery":
+		print(f"Sorry, {alien_color} aliens don't breathe oxygen and will die here.")
+	else:
+		print(f"Good news, {alien_color} aliens should be able to survive on earth if you let them eat kittens!")
+
+print("We all live happily ever after maybe!")
+
+#Good news, silver glitter aliens should be able to survive on earth if you let them eat kittens!
+#Good news, green slime aliens should be able to survive on earth if you let them eat kittens!
+#Sorry, matte black sandpapery aliens don't breathe oxygen and will die here.
+#Good news, lumpy booger aliens should be able to survive on earth if you let them eat kittens!
+#We all live happily ever after maybe!
+```
+
+Multiple Dictionaries - Aliens:
+```python
+alien_1 = {"color":"silver glitter", "points":15}  
+alient_2 = {"color":"green slime","points": 10}
+alien_3 = {"color":"matte black sandpapery","points": 5} 
+alien_4 = {"color":"lumpy booger","points": 1}
+           
+new_points = alien_1["points"]
+print(f'You won {new_points} points!')
+
+alien_3["x_position"] = 0
+alien_3["y_position"] = 25
+print(alien_3)
+
+print(f"The alien is {alien_3['color']}, so it can't breath oxygen.")
+#The alien is matte black sandpapery, so it can't breath oxygen.
+```
+Changing something in the dictionary:
+```python
+alien_3['color'] = 'translucent yellow'
+print(f"The alien is now {alien_3['color']}, so it can breathe oxygen!")
+#The alien is now translucent yellow, so it can breathe oxygen!
+```
+**ALIEN GAME**
+
+Moving the position based on a dictionary!
+
+```python
+alien_1 ={'x_position': 0, 'y_position': 25, 'speed': 'medium'}
+
+print(f"Original position: {alien_1['x_position'], alien_1['y_position']}")
+
+#Move the alien to the right
+#Determine how far ot move based on current speed:
+      
+if alien_1['speed'] =='slow':
+  x_increment = 1
+elif alien_1['speed'] == 'medium': 		x_increment = 2
+else:
+  x_increment = 3
+
+#this is the new position of the alien:
+alien_1['x_position'] = alien_1['x_position'] + x_increment
+
+print(f"The new position is {alien_1['x_position']}.")
+
+Original position: (0, 25)
+The new position is 2.
+```
+## Looping in Dictionaries:
+```python 
+favorite_aliens = {
+  'Ted': 'green slimy',
+  'Michael':'green slimy',
+  'Melissa': 'matte black sandpapery',
+  'Mari': 'translucent yellow',
+  'Berit': 'fleshy teal',
+  'Adam': 'lumpy booger',
+  'Gray': 'matte black sandpapery',
+}
+  
+for key,value in favorite_aliens.items():
+  print(f"\nName: {key}")
+  print(f"Alien: {value}")
+  
+for name in favorite_aliens.keys():
+  print(name.title())
+
+for alien in favorite_aliens.values():
+  print(alien.title())
+
+#THIS IS HOW YOU LOOP THROUGH EACH OF THEM! if you forget the items part, then it will just list the last person in the list - it needs to be able to convert the dictionary into a list in order to properly iterate through it.
+
+for name, alien in favorite_aliens.items():
+  print(f"{name.title()}'s favorite alien is {alien.title()}.")
+  
+Ted's favorite alien is Green Slimy.
+Michael's favorite alien is Green Slimy.
+Melissa's favorite alien is Matte Black Sandpapery.
+Mari's favorite alien is Translucent Yellow.
+Berit's favorite alien is Fleshy Teal.
+Adam's favorite alien is Lumpy Booger.
+Gray's favorite alien is Matte Black Sandpapery.
+```
+
  
  
 
