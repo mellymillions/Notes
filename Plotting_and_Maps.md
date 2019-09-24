@@ -139,7 +139,7 @@ We'll start by focusing on the neighbors Fred and Natalie, and points (4, 8) and
 
 Write a function called street_distance that calculates how far in streets two neighbors are from each other. So for example, with Natalie at street 4, and Fred at street 8, our street_distance function should return the number 4.
 
-## Plotly Lab  - Install and Types
+# Plotly Lab  - Install and Types
 Install Plotly:
 ```python
 !pip install plotly
@@ -194,7 +194,7 @@ plotly.offline.iplot([
 ```
 THE END!
 
-**Working with Types**
+## Working with Types
 For example, we can make a bar chart, simply by specifying the in our dictionary that the type is bar for a bar trace.
 
 ```python
@@ -245,7 +245,7 @@ plotly.offline.iplot([
     pie_trace
 ])
 ```
-**Modifying the layout**
+## Modifying the layout
 
 So far we have seen how to specify attributes of traces or charts, which display our data. Now let's see how to modify the overall layout in our chart.
 
@@ -273,7 +273,7 @@ figure = {'data': [trace_of_data], 'layout': layout}
 
 plotly.offline.iplot(figure)
 ```
-## LAB - A function to create traces
+# LAB - A function to create traces
 
 And returns data like the commented out dictionary below:
 
@@ -286,7 +286,7 @@ So **build_trace** that takes in a list of data points as arguments and returns 
 
 If no argument for mode or name is provided when we call the build_trace function, Python will automatically set these parameters to the value provided, which, in this case would be 'markers' for the mode and 'data' for the name.
 
-## build_trace function:
+## Build_trace function:
 ```python
 def build_trace (data, mode = 'markers', name = 'data'):
     x_values = list(map(lambda datapoint: datapoint['x'], data))
@@ -346,7 +346,7 @@ plot({'data': [trace0, trace2], 'layout': {'title': 'Sample Title'}})
 ```
 Our layout function should return a dictionary, just as it's defined in the above plot. We'll start by returning an empty dictionary then below we'll walk through building out the rest of the function.
 
-**layout function**
+## layout function
 ```python
 def layout(x_range = None, y_range = None, options = {}):
     layout = {}
@@ -413,3 +413,202 @@ trace4 = trace_values([4, 5, 6], [10, 5, 1], mode = 'lines')
 last_layout = layout(options = {'title': 'The big picture'})
 plot([trace4], last_layout)
 ```
+# Evaluating Linear Regression 
+
+## Regression formula
+
+Now let's add a regression line to make a prediction of output (revenue) based on an input (the budget). We'll use the following regression formula:
+
+ŷ =mx+b 
+
+with m=1.7, and b=10
+
+ŷ =1.7x+10
+
+Write a function called regression_formula that calculates our ŷ for any provided value of x.
+```python
+def regression_formula(x):
+    return 1.7*x + 10
+```    
+
+## Calculating errors of a regression Line
+
+First, here is the **y-actual** function, provided by the 'Lab' aka by Flatiron. 
+```python
+def y_actual(x, x_values, y_values):
+    combined_values = list(zip(x_values, y_values))
+    point_at_x = list(filter(lambda point: point[0] == x,combined_values))[0]
+    return point_at_x[1]
+
+x_values and y_values and y_actual(13, x_values, y_values) # 26.0
+```
+Write a function called **error**, that given a list of x_values, and a list of y_values, the values m and b of a regression line, and a value of x, returns the error at that x value. 
+
+Remember  εi=yi−ŷ  
+```python
+def error(x_values, y_values, m, b, x):
+    expected = (m*x + b)
+    return y_actual(x, x_values, y_values) - expected
+
+error(x_values, y_values, 1.7, 10, 13) # -6.099999999999994
+```
+Ok, so the function error_line_trace takes our dataset of x_values as the first argument and y_values as the second argument. It also takes in values of  m  and  b  as the next two arguments to represent the regression line we will calculate errors from. Finally, the last argument is the value  x  it is drawing an error for.
+
+The return value is a dictionary that represents a trace, and looks like the following:
+
+{'marker': {'color': 'red'},
+ 'mode': 'lines',
+ 'name': 'error at 120',
+ 'x': [120, 120],
+ 'y': [93.0, 214.0]}
+
+The trace represents the error line above. The data in x and y represent the starting point and ending point of the error line. Note that the x value is the same for the starting and ending point, just as it is for each vertical line. It's just the y values that differ - representing the actual value and the expected value. The mode of the trace equals 'lines'.
+```python
+error_line_trace(x_values, y_values, m, b, x):
+    y_hat = m*x + b
+    y = y_actual(x, x_values, y_values)
+    name = 'error at ' + str(x)
+    return {'x': [x, x], 'y': [y, y_hat], 'mode': 'lines', 'marker': {'color': 'red'}, 'name': name}
+
+error_at_120m = error_line_trace(x_values, y_values, 1.7, 10, 120)
+```
+
+## Calculating Residual Sum of Squared in Python:
+
+Now write a function called **squared_error**, that given a value of x, returns the squared error at that x value.
+
+```python
+def squared_error(x_values, y_values, m, b, x):
+    return error(x_values, y_values, m, b, x)**2
+    pass
+
+x_values and y_values and squared_error(x_values, y_values, 1.7, 10, x_values[0]) # 37.20999999999993
+```
+Now write a function that will iterate through the x and y values to create a list of **squared_errors** at each point,  (xi,yi) of the dataset.
+```python
+def squared_errors(x_values, y_values, m, b):
+    return list(map(lambda x: squared_error(x_values, y_values, m, b, x), x_values))
+    pass
+# Note that this differs from above sqaured_error function in that it uses that function and iterates through each point of the dataset.
+
+x_values and y_values and squared_errors(x_values, y_values, 1.7, 10)
+```
+Next, write a function called **residual_sum_squares** that, provided a list of x_values, y_values, and the m and b values of a regression line, returns the sum of the squared error for the movies in our dataset.
+```python
+def residual_sum_squares(x_values, y_values, m, b):
+    return sum(squared_errors(x_values, y_values, m, b))
+    pass
+# Note that this function takes the sum of all the sqaured errors from the previous function.
+
+residual_sum_squares(x_values, y_values, 1.7, 10) # 327612.2800000001
+```
+Finally, write a function called **root_mean_squared_error** that calculates the RMSE for the movies in the dataset, provided the same parameters as RSS. 
+
+Remember that root_mean_squared_error is a way for us to measure the **approximate error per data point**.
+```python
+import math
+def root_mean_squared_error(x_values, y_values, m, b):
+    return math.sqrt(residual_sum_squares(x_values, y_values, m, b)/len(x_values))
+
+root_mean_squared_error(x_values, y_values, 1.7, 10) # 104.50076235766578
+```
+That is it! You have calculted the RSS!
+
+## More Functions - for RSS
+
+Note that we can represent multiple regression lines by a list of m and b values:
+```python
+regression_lines = [(1.7, 10), (1.9, 20)]
+```
+Then we can return a list of the regression lines along with the associated RMSE.
+```python
+def root_mean_squared_errors(x_values, y_values, regression_lines):
+    errors = []
+    for regression_line in regression_lines:
+        error = root_mean_squared_error(x_values, y_values, regression_line[0], regression_line[1])
+        errors.append([regression_line[0], regression_line[1], round(error, 0)])
+    return errors
+```
+Now let's generate the RMSE values for each of these lines.
+```python
+x_values and y_values and root_mean_squared_errors(x_values, y_values, regression_lines)
+
+[[1.7, 10, 105.0], [1.9, 20, 120.0]]
+```
+1. function called **trace_rmse**, that builds a bar chart displaying the value of the RMSE. 
+
+The return value is a dictionary with keys of x and y, both which point to lists. The  x  key points to a list with one element, a string containing each regression line's m and b value. The  y  key points to a list of the RMSE values for each corresponding regression line.
+```python
+import plotly.graph_objs as go
+
+def trace_rmse(x_values, y_values, regression_lines):
+    errors = root_mean_squared_errors(x_values, y_values, regression_lines)
+    x_values_bar = list(map(lambda error: 'm: ' + str(error[0]) + ' b: ' + str(error[1]), errors))
+    y_values_bar = list(map(lambda error: error[-1], errors))
+    return dict(
+        x=x_values_bar,
+        y=y_values_bar,
+        type='bar'
+    )
+
+
+x_values and y_values and trace_rmse(x_values, y_values, regression_lines)
+```
+Once this is built, we can create a subplot showing the two regression lines, as well as the related RMSE for each line.
+```python
+import plotly
+from plotly.offline import iplot
+from plotly import tools
+import plotly.graph_objs as go
+
+def regression_and_rss(scatter_trace, regression_traces, rss_calc_trace):
+    fig = tools.make_subplots(rows=1, cols=2)
+    for reg_trace in regression_traces:
+        fig.append_trace(reg_trace, 1, 1)
+    fig.append_trace(scatter_trace, 1, 1)
+    fig.append_trace(rss_calc_trace, 1, 2)
+    iplot(fig)
+```
+AND...
+```python
+### add more regression lines here, by adding new elements to the list
+regression_lines = [(1.7, 10), (1, 50)]
+
+if x_values and y_values:
+    regression_traces = list(map(lambda line: m_b_trace(line[0], line[1], x_values, name='m:' + str(line[0]) + 'b: ' + str(line[1])), regression_lines))
+
+    scatter_trace = trace_values(x_values, y_values, text=titles, name='movie data')
+    rmse_calc_trace = trace_rmse(x_values, y_values, regression_lines)
+
+    regression_and_rss(scatter_trace, regression_traces, rmse_calc_trace)
+```
+In the plot shown with this function, we can see above, the second line (m: 1.0, b: 50) has the lower RMSE. 
+
+We thus can conclude that the second line "fits" our set of movie data better than the first line. Ultimately, **our goal will be to choose the regression line with the lowest RSME or RSS**. We will learn how to accomplish this goal in the following lessons and labs.
+
+# Gradient Descent
+
+First:
+
+Evaluate the regression line again by first displaying errors in the graph:
+```python
+def y_actual(x, x_values, y_values):
+    combined_values = list(zip(x_values, y_values))
+    point_at_x = list(filter(lambda point: point[0] == x,combined_values))[0]
+    return point_at_x[1]
+
+def error_line_trace(x_values, y_values, m, b, x):
+    y_hat = m*x + b
+    y = y_actual(x, x_values, y_values)
+    name = 'error at ' + str(x)
+    error_value = y - y_hat
+    return {'x': [x, x], 'y': [y, y_hat], 'mode': 'lines', 'marker': {'color': 'red'}, 'name': name, 'text': [error_value], 'textposition':'top right'}
+
+def error_line_traces(x_values, y_values, m, b):
+    return list(map(lambda x_value: error_line_trace(x_values, y_values, m, b, x_value), x_values))
+
+errors = error_line_traces(budgets, revenues, 1.417, 133.33)
+plot([scatter_trace, regression_trace, *errors])
+```
+
+

@@ -1186,7 +1186,7 @@ print(high)
 80
 120
 ```
-**Using range in for loops**
+## Using range in for loops
 
 Notice that we need to iterate through a list of length 3, but we don’t care what’s in the list. To create these lists of length n, we can use the range function. range takes in a number n as input, and returns a list from 0 to n-1.
 ```python
@@ -1424,6 +1424,9 @@ def distance(first_neighbor, second_neighbor):
 
 distance(fred, natalie) # 4.123105625617661
 ```
+
+## Nearest Neighbors
+
 Writing Our **"Nearest Neighbors"** Functions
 
 
@@ -1663,7 +1666,7 @@ train_work = (get_work(train_mass, train_acceleration, train_distance))
 
 print("The GE train does " + str(train_work) + " Joules of work over " + str(train_distance) + " meters.")
 ```
-# Allow or Don't Allow - using IF and ELSE
+## Allow or Don't Allow - using IF and ELSE
 
 ```python
 banned_users = ['Melissa', 'Michael', 'Ted', 'Mari', 'Eyeball Monster']
@@ -1802,6 +1805,376 @@ Berit's favorite alien is Fleshy Teal.
 Adam's favorite alien is Lumpy Booger.
 Gray's favorite alien is Matte Black Sandpapery.
 ```
+## Sets 
+
+Pulls all values from a list without repeats!
+```python
+favorite_aliens = {
+  'Ted': 'green slimy',
+  'Michael':'green slimy',
+  'Melissa': 'matte black sandpapery',
+  'Mari': 'translucent yellow',
+  'Berit': 'fleshy teal',
+  'Adam': 'lumpy booger',
+  'Gray': 'matte black sandpapery'
+}
+
+print("The following aliens have been mentioned:")
+for alien in set(favorite_aliens.values()):
+  print(alien.title())
+```
+## Sorted
+
+Provides all keys or values in alphabetical order.
+```python
+print("Here are the people who took the alien quiz:")
+for name in sorted(favorite_aliens.keys()):
+  print(name)
+
+Here are the people who took the alien quiz:
+Adam
+Berit
+Gray
+Mari
+Melissa
+Michael
+Ted
+```
+## Comparing list and dictionary using a For Loop:
+
+In this case, comparing a list of Friends to a Favorite Alien poll:
+```python
+favorite_aliens = {
+  'Ted': 'green slimy',
+  'Michael':'green slimy',
+  'Melissa': 'matte black sandpapery',
+  'Mari': 'translucent yellow',
+  'Berit': 'fleshy teal',
+  'Adam': 'lumpy booger',
+  'Gray': 'matte black sandpapery'
+}
+
+friends = ['Ted', 'Michael', 'Mari','Sara', 'Sabina']
+
+for name in friends:
+	if name in favorite_aliens:
+		print(f"Thank you {name.title()} for taking the quiz!")
+	else:
+ 	 print(f"{name.title()}, take the favorite aliens poll!")
+
+Thank you Ted for taking the quiz!
+Thank you Michael for taking the quiz!
+Thank you Mari for taking the quiz!
+Sara, take the favorite aliens poll!
+Sabina, take the favorite aliens poll!
+```
+# Nesting
+
+## Making a list of dictionaries!
+```python
+#back to the alien game!
+
+alien_1 = {"color":"silver glitter", "points":15}
+alien_2 = {"color":"green slime","points": 10}
+alien_3 = {"color":"matte black sandpapery","points": 5} 
+alien_4 = {"color":"lumpy booger","points": 1}
+
+aliens = [alien_1, alien_2, alien_3, alien_4]
+
+for alien in aliens:
+  print(alien)
+
+{'color': 'silver glitter', 'points': 15}
+{'color': 'green slime', 'points': 10}
+{'color': 'matte black sandpapery', 'points': 5}
+{'color': 'lumpy booger', 'points': 1}
+```
+## Generating a list
+
+In this example, we will CREATE a list based on criteria specied in For Loop:
+```python
+#Make a list for storing aliens:
+aliens = []
+
+#Make 30 aliens
+for alien_number in range(30):
+  new_alien = {'color': 'green slime', 'points': 10, 'speed': 'slow'}
+  aliens.append(new_alien)
+
+for alien in aliens[0:3]:
+	if alien['color'] == 'green slime':
+		alien['color'] = 'silver glitter'
+		alien['speed'] = 'medium'
+		alien['points'] = 15
+	elif alien['color'] =='silver glitter':
+		alien['color'] = 'matte black sandpapery'
+		alien['speed'] = 'fast'
+		alien['points'] = 20
+    
+#show first 5 aliens
+for alien in aliens[:5]:
+  print(alien)
+print("...")
+
+#total aliens created:
+print(len(aliens))
+
+{'color': 'silver glitter', 'points': 15, 'speed': 'medium'}
+{'color': 'silver glitter', 'points': 15, 'speed': 'medium'}
+{'color': 'silver glitter', 'points': 15, 'speed': 'medium'}
+{'color': 'green slime', 'points': 10, 'speed': 'slow'}
+{'color': 'green slime', 'points': 10, 'speed': 'slow'}
+...
+30
+```
+## A List in a Dictionary
+
+```python
+zombie_pizza = {
+  'crust': 'moldy', 
+  'toppings':['ears', 'blood', 'green peppers']
+}
+
+#summarize the order
+print(f"You ordered a {zombie_pizza['crust']}-crust zombie pizza"" with the following toppings:")
+#Here we needed a break in the print line
+      
+for topping in zombie_pizza['toppings']:
+	print("\t" + topping)
+#the \t in this example makes it into a table.
+
+You ordered a moldy-crust zombie pizza with the following toppings:
+	ears
+	blood
+	green peppers
+```
+## Nesting lists in dictionaries:
+```python
+favorite_aliens = {
+  'Michael':['green slimy'],
+  'Melissa': ['matte black sandpapery'],
+  'Mari': ['translucent yellow'],
+  'Berit': ['fleshy teal'],
+  'Sara': ['green slimy'],
+  'Adam': ['lumpy booger', 'matte black sandpapery'],
+   'Ted': ['green slimy','fleshy teal'],
+  'Gray': ['matte black sandpapery', 'translucent yellow'],
+}
+
+for name, aliens in favorite_aliens.items():
+	print(f"\n{name.title()}'s favorite aliens are:")
+	for alien in aliens:
+		print(f"\t{alien}")
+  
+  Michael's favorite aliens are:
+	green slimy
+
+Melissa's favorite aliens are:
+	matte black sandpapery
+
+Mari's favorite aliens are:
+	translucent yellow
+
+Berit's favorite aliens are:
+	fleshy teal
+
+Sara's favorite aliens are:
+	green slimy
+
+Adam's favorite aliens are:
+	lumpy booger
+	matte black sandpapery
+
+Ted's favorite aliens are:
+	green slimy
+	fleshy teal
+
+Gray's favorite aliens are:
+	matte black sandpapery
+	translucent yellow
+```
+# While Loops
+
+Need to revisit this!!
+
+```python
+responses = {}
+#set a flag to indicate polling is active
+polling_active = True
+
+while polling_active:
+  #prompt for the persons name and response
+	name = input("\nWhat is your name?")
+	response = input("Which mountain would you like to live on one day?")
+
+#store the response in a dictionary
+	responses[name] = response
+
+#Find out if anyone else is going to take the poll
+	repeat = input("Would you like to let the person respond? (yes/no)")
+	if repeat == 'no':
+		polling_active = False
+
+#Polling is complete. Show results
+	print("\n---Polling Results---")
+	for name, response in responses.items():
+		print(f"\n{name} would  like to live on {response}.")
+```
+## Functions and While Loops
+
+```python
+def get_formatted(first,last):
+ full_name = f"{first}{last}"
+ return full_name.title()
+
+while True:
+ print("n\Tell me your name!!!")
+ print("(enter 'q' at any time to quit.)")
+  
+ f_name = input("first name:")
+ if f_name == 'q':
+  break
+    
+ l_name = input("last name:")
+ if l_name == 'q':
+   break
+  
+ formatted_name = get_formatted(f_name, l_name)
+ print(f"\nHello, {formatted_name}!")
+```
+# Function Practice
+
+## Returning a dictionary with a function:
+```python
+def build_person(first, last):
+  person = {'first': first, 'last': last}
+  return person
+
+melissa_munz = build_person('Melissa', 'Munz')
+print(melissa_munz)
+
+{'first': 'Melissa', 'last': 'Munz'}
+```
+## Passing a list through a function
+```python
+def greet_users(names):
+ for name in names:
+  message = f"Hi {name.title()}, do you like aliens?"
+  print(message)
+  
+
+friends = ['Michael', 'Sara', 'Berit']
+greet_users(friends)
+
+Hi Michael, do you like aliens?
+Hi Sara, do you like aliens?
+Hi Berit, do you like aliens?
+```
+## Modifying a list in a Function
+```python
+unprinted_designs = ['phone case', 'robot', 'alien']
+completed_models = []
+
+while unprinted_designs:
+  current_design = unprinted_designs.pop()
+  print(f"Printing model:{current_design}") 
+  completed_models.append(current_design)
+  
+print("\nThe following models have been printed:")
+for completed_model in completed_models:
+  print(completed_models)
+
+Printing model:alien
+Printing model:robot
+Printing model:phone case
+
+The following models have been printed:
+['alien', 'robot', 'phone case']
+['alien', 'robot', 'phone case']
+['alien', 'robot', 'phone case']
+```
+# Game of Chance
+```python
+import random
+
+money = 100
+
+#Write your game of chance functions here
+
+def game_of_chance(guess, bet):
+ num = random.randint(1, 10)
+ if num == guess:
+  bank = money+bet
+  return(f"You guessed {guess}. The number was {num}. You are correct! You now have {bank}!")
+ elif num != guess:
+  bank = money-bet
+  return (f"You guessed {guess}, which is the wrong guess. The correct answer was {num}. You suck! You're the worst! You now have {bank}.")
+
+print(game_of_chance(11,10))
+```
+# Heads or Tails
+```python
+import random
+
+money = 100
+
+#Write your game of chance functions here
+
+heads_or_tails = {
+  1: "heads",
+  2: "tails",
+}
+
+def game_of_chance(guess, bet):
+  num = random.randint(1,2)
+  result = heads_or_tails[num]
+  if result == guess:
+    bank = money+bet 
+    return(f"You guessed {guess},and the answer was {result} which is correct! You now have {bank}!")
+  else:
+    bank = money-bet
+    return (f"You lose. You guessed {guess} but the answer is {heads_or_tails[num]}. You bet {bet}, so now you have {bank}.")
+  
+print(game_of_chance('heads',10))
+
+You lose. You guessed heads but the answer is tails. You bet 10, so now you have 90.
+```
+Cleaned up version: Heads or Tails
+```python
+import random
+
+money = 100
+
+#Write your game of chance functions here
+
+heads_or_tails = {
+  1: "heads",
+  2: "tails",
+}
+
+def game_of_chance(guess, bet):
+  global money
+  num = random.randint(1,2)
+  result = heads_or_tails[num]
+  if result == guess:
+    money = money+bet 
+    return(f"You guessed {guess},and the answer was {result} which is correct! You now have {money}!")
+  else:
+    money = money-bet
+    return (f"You lose. You guessed {guess} but the answer is {heads_or_tails[num]}. You bet {bet}, so now you have {money}.")
+  
+print(game_of_chance('heads',10))
+print(game_of_chance('heads',10))
+print(game_of_chance('heads',10))
+
+You guessed heads,and the answer was heads which is correct! You now have 110!
+You lose. You guessed heads but the answer is tails. You bet 10, so now you have 100.
+You lose. You guessed heads but the answer is tails. You bet 10, so now you have 90.
+```
+
+
+
+
 
  
  

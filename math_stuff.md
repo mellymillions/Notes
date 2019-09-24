@@ -1415,3 +1415,118 @@ sum(num_range)
 #55
 ```
 All this is the same as using SIGNA NOTATION!!
+
+## Evaluating Regression Lines
+
+Using a dictionary, converting movie data into variables:
+```python
+
+movies[0]
+{'budget': 13000000, 'domgross': 25682380.0, 'title': '21 &amp; Over'}
+
+#converting to manageable numbers because amounts are in millions.
+movies[0]['budget']/1000000
+
+#using map to convert all of them to meaningful scles numbers.
+scaled_movies = list(map(lambda movie: {'title': movie['title'], 'budget': round(movie['budget']/1000000, 0), 'domgross': round(movie['domgross']/1000000, 0)}, movies))
+scaled_movies[0]
+
+{'title': '21 &amp; Over', 'budget': 13.0, 'domgross': 26.0}
+```
+As a first task, convert the budget values of our scaled_movies to x_values, and convert the domgross values of the scaled_movies to y_values.
+```python
+x_values = list(map(lambda movies: movies['budget'], scaled_movies))
+
+y_values = list(map(lambda movies: movies['domgross'], scaled_movies))
+
+#Assign a variable called titles equal to the titles of the movies.
+titles = list(map(lambda movies: movies['title'], scaled_movies))
+```
+Using Plotly to plot these points on a graph:
+```python
+from plotly.offline import iplot, init_notebook_mode
+init_notebook_mode(connected=True)
+from graph import trace_values, plot
+
+movies_trace = trace_values(x_values, y_values, text=titles, name='movie data')
+
+plot([movies_trace])
+```
+**Plotting a regression Line**
+Now let's add a regression line to make a prediction of output (revenue) based on an input (the budget). We'll use the following regression formula:
+
+ŷ =1.7x+10
+```python
+def regression_formula(x):
+    return 1.7*x + 10
+```
+Use Plotly to create the regression line:
+```python
+from plotly.offline import iplot, init_notebook_mode
+init_notebook_mode(connected=True)
+from graph import trace_values, m_b_trace, plot
+
+if x_values and y_values:
+    movies_trace = trace_values(x_values, y_values, text=titles, name='movie data')
+    regression_trace = m_b_trace(1.7, 10, x_values, name='estimated revenue')
+    plot([movies_trace, regression_trace])
+```
+## Calculating Error of regression line
+
+First, We provide a function called y_actual that given a data set of x_values and y_values, finds the actual y value, provided a value of x.
+```python
+def y_actual(x, x_values, y_values):
+    combined_values = list(zip(x_values, y_values))
+    point_at_x = list(filter(lambda point: point[0] == x,combined_values))[0]
+    return point_at_x[1]
+
+x_values and y_values and y_actual(13, x_values, y_values) # 26.0
+```
+Then we write an error function:
+
+ Given a list of x_values, and a list of y_values, the values m and b of a regression line, and a value of x, returns the error at that x value. Remember  εi=yi−ŷ 
+ ```python
+ def error(x_values, y_values, m, b, x):
+    expected = (m*x + b)
+    return y_actual(x, x_values, y_values) - expected
+```
+Ok, so the function error_line_trace takes our dataset of x_values as the first argument and y_values as the second argument. It also takes in values of  mm  and  bb  as the next two arguments to represent the regression line we will calculate errors from. Finally, the last argument is the value  xx  it is drawing an error for.
+
+The return value is a dictionary that represents a trace, and looks like the following:
+
+{'marker': {'color': 'red'},
+ 'mode': 'lines',
+ 'name': 'error at 120',
+ 'x': [120, 120],
+ 'y': [93.0, 214.0]}
+
+The trace represents the error line above. The data in x and y represent the starting point and ending point of the error line. 
+
+Note that the x value is the same for the starting and ending point, just as it is for each vertical line. It's just the y values that differ - representing the actual value and the expected value. The mode of the trace equals 'lines'.
+```python
+def error_line_trace(x_values, y_values, m, b, x):
+    y_hat = m*x + b
+    y = y_actual(x, x_values, y_values)
+    name = 'error at ' + str(x)
+    return {'x': [x, x], 'y': [y, y_hat], 'mode': 'lines', 'marker': {'color': 'red'}, 'name': name}
+```
+From there, we can write a function called error_line_traces, that takes in a list of x_values as an argument, y_values as an argument, and returns a list of traces for every x value provided.
+```python
+def error_line_traces(x_values, y_values, m, b):
+    return list(map(lambda x_value: error_line_trace(x_values, y_values, m, b, x_value), x_values))
+```
+Now when we run this in Plotly we'll see the error (in lines) of all the plots and their relationship to the line of best fit.
+```python
+from plotly.offline import iplot, init_notebook_mode
+init_notebook_mode(connected=True)
+
+from graph import trace_values, m_b_trace, plot
+
+if x_values and y_values:
+    movies_trace = trace_values(x_values, y_values, text=titles, name='movie data')
+    regression_trace = m_b_trace(1.7, 10, x_values, name='estimated revenue')
+    plot([movies_trace, regression_trace, *errors_for_regression])
+```
+It looks really cool!
+
+##  Calculating RSS

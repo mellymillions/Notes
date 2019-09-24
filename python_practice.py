@@ -131,7 +131,42 @@ michaels = ['good micheal', 'bad michael']
 for michael in michaels:
   print(f"{michael} sucks")
 
+favorite_aliens = {
+  'Michael':'green slimy',
+  'Melissa': 'matte black sandpapery',
+  'Mari': 'translucent yellow',
+  'Berit': 'fleshy teal',
+  'Sara': 'green slimy',
+  'Adam': ['lumpy booger', 'matte black sandpapery'],
+   'Ted': ['green slimy','fleshy teal'],
+  'Gray': ['matte black sandpapery', 'translucent yellow'],
+}
 
+for name, aliens in favorite_aliens.items(): 
+  print(f"\n{name.title()}'s favorite aliens are:")
+  for alien in aliens:
+    print(f"\t{aliens}")
+  
 
+responses = {}
+#set a flag to indicate polling is active
+polling_active = True
 
+while polling_active:
+  #prompt for the persons name and response
+	name = input("\nWhat is your name?")
+	response = input("Which mountain would you like to live on one day?")
+
+#store the response in a dictionary
+	responses[name] = response
+
+#Find out if anyone else is going to take the poll
+	repeat = input("Would you like to let the person respond? (yes/no)")
+	if repeat == 'no':
+		polling_active = False
+
+#Polling is complete. Show results
+	print("\n---Polling Results---")
+	for name, response in responses.items():
+		print(f"\n{name} would  like to live on {response}.")
 
