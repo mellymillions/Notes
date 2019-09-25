@@ -1019,7 +1019,7 @@ y_at_six_trace = trace_values(zero_to_ten, y_values_for_at_six(zero_to_ten),  mo
 
 y_at_nine_trace = trace_values(zero_to_ten, y_values_for_at_nine(zero_to_ten),  mode = 'lines', name = 'f(x, y) at y=9') or {}
 ```
-## **Using our partial derivative rule**
+## Using our partial derivative rule
 
 Now let's consider the function  f(x,y)=4x^2y+3x+y. 
 
@@ -1529,4 +1529,591 @@ if x_values and y_values:
 ```
 It looks really cool!
 
-##  Calculating RSS
+# Evaluating Linear Regression 
+
+## Regression formula
+
+Now let's add a regression line to make a prediction of output (revenue) based on an input (the budget). We'll use the following regression formula:
+
+ŷ =mx+b 
+
+with m=1.7, and b=10
+
+ŷ =1.7x+10
+
+Write a function called regression_formula that calculates our ŷ for any provided value of x.
+```python
+def regression_formula(x):
+    return 1.7*x + 10
+```    
+
+## Calculating errors of a regression Line
+
+First, here is the **y-actual** function, provided by the 'Lab' aka by Flatiron. 
+```python
+def y_actual(x, x_values, y_values):
+    combined_values = list(zip(x_values, y_values))
+    point_at_x = list(filter(lambda point: point[0] == x,combined_values))[0]
+    return point_at_x[1]
+
+x_values and y_values and y_actual(13, x_values, y_values) # 26.0
+```
+Write a function called **error**, that given a list of x_values, and a list of y_values, the values m and b of a regression line, and a value of x, returns the error at that x value. 
+
+Remember  εi=yi−ŷ  
+```python
+def error(x_values, y_values, m, b, x):
+    expected = (m*x + b)
+    return y_actual(x, x_values, y_values) - expected
+
+error(x_values, y_values, 1.7, 10, 13) # -6.099999999999994
+```
+Ok, so the function error_line_trace takes our dataset of x_values as the first argument and y_values as the second argument. It also takes in values of  m  and  b  as the next two arguments to represent the regression line we will calculate errors from. Finally, the last argument is the value  x  it is drawing an error for.
+
+The return value is a dictionary that represents a trace, and looks like the following:
+
+{'marker': {'color': 'red'},
+ 'mode': 'lines',
+ 'name': 'error at 120',
+ 'x': [120, 120],
+ 'y': [93.0, 214.0]}
+
+The trace represents the error line above. The data in x and y represent the starting point and ending point of the error line. Note that the x value is the same for the starting and ending point, just as it is for each vertical line. It's just the y values that differ - representing the actual value and the expected value. The mode of the trace equals 'lines'.
+```python
+error_line_trace(x_values, y_values, m, b, x):
+    y_hat = m*x + b
+    y = y_actual(x, x_values, y_values)
+    name = 'error at ' + str(x)
+    return {'x': [x, x], 'y': [y, y_hat], 'mode': 'lines', 'marker': {'color': 'red'}, 'name': name}
+
+error_at_120m = error_line_trace(x_values, y_values, 1.7, 10, 120)
+```
+
+## Calculating Residual Sum of Squares in Python:
+
+Now write a function called **squared_error**, that given a value of x, returns the squared error at that x value.
+
+```python
+def squared_error(x_values, y_values, m, b, x):
+    return error(x_values, y_values, m, b, x)**2
+    pass
+
+x_values and y_values and squared_error(x_values, y_values, 1.7, 10, x_values[0]) # 37.20999999999993
+```
+Now write a function that will iterate through the x and y values to create a list of **squared_errors** at each point,  (xi,yi) of the dataset.
+```python
+def squared_errors(x_values, y_values, m, b):
+    return list(map(lambda x: squared_error(x_values, y_values, m, b, x), x_values))
+    pass
+# Note that this differs from above sqaured_error function in that it uses that function and iterates through each point of the dataset.
+
+x_values and y_values and squared_errors(x_values, y_values, 1.7, 10)
+```
+Next, write a function called **residual_sum_squares** that, provided a list of x_values, y_values, and the m and b values of a regression line, returns the sum of the squared error for the movies in our dataset.
+```python
+def residual_sum_squares(x_values, y_values, m, b):
+    return sum(squared_errors(x_values, y_values, m, b))
+    pass
+# Note that this function takes the sum of all the sqaured errors from the previous function.
+
+residual_sum_squares(x_values, y_values, 1.7, 10) # 327612.2800000001
+```
+Finally, write a function called **root_mean_squared_error** that calculates the RMSE for the movies in the dataset, provided the same parameters as RSS. 
+
+Remember that root_mean_squared_error is a way for us to measure the **approximate error per data point**.
+```python
+import math
+def root_mean_squared_error(x_values, y_values, m, b):
+    return math.sqrt(residual_sum_squares(x_values, y_values, m, b)/len(x_values))
+
+root_mean_squared_error(x_values, y_values, 1.7, 10) # 104.50076235766578
+```
+That is it! You have calculted the RSS!
+
+## More Functions - for RSS
+
+Note that we can represent multiple regression lines by a list of m and b values:
+```python
+regression_lines = [(1.7, 10), (1.9, 20)]
+```
+Then we can return a list of the regression lines along with the associated RMSE.
+```python
+def root_mean_squared_errors(x_values, y_values, regression_lines):
+    errors = []
+    for regression_line in regression_lines:
+        error = root_mean_squared_error(x_values, y_values, regression_line[0], regression_line[1])
+        errors.append([regression_line[0], regression_line[1], round(error, 0)])
+    return errors
+```
+Now let's generate the RMSE values for each of these lines.
+```python
+x_values and y_values and root_mean_squared_errors(x_values, y_values, regression_lines)
+
+[[1.7, 10, 105.0], [1.9, 20, 120.0]]
+```
+1. function called **trace_rmse**, that builds a bar chart displaying the value of the RMSE. 
+
+The return value is a dictionary with keys of x and y, both which point to lists. The  x  key points to a list with one element, a string containing each regression line's m and b value. The  y  key points to a list of the RMSE values for each corresponding regression line.
+```python
+import plotly.graph_objs as go
+
+def trace_rmse(x_values, y_values, regression_lines):
+    errors = root_mean_squared_errors(x_values, y_values, regression_lines)
+    x_values_bar = list(map(lambda error: 'm: ' + str(error[0]) + ' b: ' + str(error[1]), errors))
+    y_values_bar = list(map(lambda error: error[-1], errors))
+    return dict(
+        x=x_values_bar,
+        y=y_values_bar,
+        type='bar'
+    )
+
+
+x_values and y_values and trace_rmse(x_values, y_values, regression_lines)
+```
+Once this is built, we can create a subplot showing the two regression lines, as well as the related RMSE for each line.
+```python
+import plotly
+from plotly.offline import iplot
+from plotly import tools
+import plotly.graph_objs as go
+
+def regression_and_rss(scatter_trace, regression_traces, rss_calc_trace):
+    fig = tools.make_subplots(rows=1, cols=2)
+    for reg_trace in regression_traces:
+        fig.append_trace(reg_trace, 1, 1)
+    fig.append_trace(scatter_trace, 1, 1)
+    fig.append_trace(rss_calc_trace, 1, 2)
+    iplot(fig)
+```
+AND...
+```python
+### add more regression lines here, by adding new elements to the list
+regression_lines = [(1.7, 10), (1, 50)]
+
+if x_values and y_values:
+    regression_traces = list(map(lambda line: m_b_trace(line[0], line[1], x_values, name='m:' + str(line[0]) + 'b: ' + str(line[1])), regression_lines))
+
+    scatter_trace = trace_values(x_values, y_values, text=titles, name='movie data')
+    rmse_calc_trace = trace_rmse(x_values, y_values, regression_lines)
+
+    regression_and_rss(scatter_trace, regression_traces, rmse_calc_trace)
+```
+In the plot shown with this function, we can see above, the second line (m: 1.0, b: 50) has the lower RMSE. 
+
+We thus can conclude that the second line "fits" our set of movie data better than the first line. Ultimately, **our goal will be to choose the regression line with the lowest RSME or RSS**. We will learn how to accomplish this goal in the following lessons and labs.
+
+# Gradient Descent
+
+## First reviewing RSS and RSME:
+
+Difference etween RSS, TSS, ESS explained: https://www.youtube.com/watch?v=I8cRj0wefi8
+
+First:
+
+Evaluate the regression line again by first displaying errors in the graph:
+```python
+def y_actual(x, x_values, y_values):
+    combined_values = list(zip(x_values, y_values))
+    point_at_x = list(filter(lambda point: point[0] == x,combined_values))[0]
+    return point_at_x[1]
+
+def error_line_trace(x_values, y_values, m, b, x):
+    y_hat = m*x + b
+    y = y_actual(x, x_values, y_values)
+    name = 'error at ' + str(x)
+    error_value = y - y_hat
+    return {'x': [x, x], 'y': [y, y_hat], 'mode': 'lines', 'marker': {'color': 'red'}, 'name': name, 'text': [error_value], 'textposition':'top right'}
+
+def error_line_traces(x_values, y_values, m, b):
+    return list(map(lambda x_value: error_line_trace(x_values, y_values, m, b, x_value), x_values))
+
+errors = error_line_traces(budgets, revenues, 1.417, 133.33)
+plot([scatter_trace, regression_trace, *errors])
+```
+From there, we calculate the **residual sum of squared errors** and the **root mean squared error**:
+```python
+import math
+def error(x_values, y_values, m, b, x):
+    expected = (m*x + b)
+    return (y_actual(x, x_values, y_values) - expected)
+
+def squared_error(x_values, y_values, m, b, x):
+    return round(error(x_values, y_values, m, b, x)**2, 2)
+
+def squared_errors(x_values, y_values, m, b):
+    return list(map(lambda x: squared_error(x_values, y_values, m, b, x), x_values))
+
+def residual_sum_squares(x_values, y_values, m, b):
+    return round(sum(squared_errors(x_values, y_values, m, b)), 2)
+
+def root_mean_squared_error(x_values, y_values, m, b):
+    return round(math.sqrt(sum(squared_errors(x_values, y_values, m, b))/len(x_values)), 2)
+
+squared_errors(budgets, revenues, 1.417, 133.33) #[0.0, 13625.89, 3896.26, 4741.01, 0.02]
+residual_sum_squares(budgets, revenues, 1.417, 133.33) # 22263.18
+root_mean_squared_error(budgets, revenues, 1.417, 133.33) # 66.73
+```
+## Best Fit Line - Moving towards gradient descent
+
+Now that we have the residual sum of squares function to evaluate the accuracy of our regression line, we can simply try out different regression lines and use the regression line that has the lowest RSS. 
+
+The regression line that produces the lowest RSS for a given dataset is called the **"best fit" line** for that dataset.
+
+So this will be our technique for finding our "best fit" line:
+
+1. Choose a regression line with a guess of values for  m  and  b 
+2. Calculate the RSS
+3. Adjust  m  and  b , as these are the only things that can vary in a single-variable regression line.
+4. Again calculate the RSS
+5. Repeat this process
+6. The regression line (that is, the values of  b  and  m ) with the **smallest RSS is our best fit line**!
+
+We'll eventually tweak and improve upon that process, but for now it will do. 
+
+In fact, we will make things even easier at first by holding  m  fixed to a constant value while we experiment with different  b  values. In later lessons, we will change both variables.
+
+**Updating the regression line to improve accuracy**
+
+Ok, so we have a regression line of  ŷ =mx+b, and we started with values of  m=1.417  and  b=133.33. 
+
+Then seeing how well this regression line matched our dataset, we calculated that  RSS=22,263.18. 
+
+Our next step is to plug in different values of  b  and see how RSS changes. Let's try  b  = 140 instead of  133.33.
+```python
+residual_sum_squares(budgets, revenues, 1.417, 140)
+#output
+24130.78
+```
+Now let's the RSS for a **variety of  b  values**:
+```python
+def residual_sum_squares_errors(x_values, y_values, regression_lines):
+    errors = []
+    for regression_line in regression_lines:
+        error = residual_sum_squares(x_values, y_values, regression_line[0], regression_line[1])
+        errors.append([regression_line[0], regression_line[1], round(error, 0)])
+    return errors
+
+b_values = list(range(70, 150, 10))
+
+m_values = [1.417]*8
+regression_lines = list(zip(m_values, b_values))
+regression_lines
+
+#output
+[(1.417, 70),
+ (1.417, 80),
+ (1.417, 90),
+ (1.417, 100),
+ (1.417, 110),
+ (1.417, 120),
+ (1.417, 130),
+ (1.417, 140)]
+
+ rss_lines = residual_sum_squares_errors(budgets, revenues, regression_lines)
+rss_lines
+#output
+[[1.417, 70, 26696.0],
+ [1.417, 80, 23330.0],
+ [1.417, 90, 20963.0],
+ [1.417, 100, 19597.0],
+ [1.417, 110, 19230.0],
+ [1.417, 120, 19864.0],
+ [1.417, 130, 21497.0],
+ [1.417, 140, 24131.0]]
+```
+(These values were added to a chart). While keeping our value of  m  fixed at 1.417, we moved towards a smaller residual sum of squares (RSS) by changing our value of  b , our y-intercept.
+
+**Important!** Setting  b  to 130 produced a lower error than at 140. We kept moving our  bb  value lower until we set  b  = 100, at which point our error began to increase. 
+
+Therefore, we know that a value of  b  between 110 and 100 produces the smallest RSS for our data while  m=1.417.
+
+This changing output of RSS based on a changing input of different regression lines is called our **cost function**. Let's plot this chart to see it better.
+
+## Cost Function, or Cost Curve
+We set:
+
+1. b_values as the input values (x values)
+2. rss_errors as the output values (y values)
+
+```python
+b_values = list(range(70, 150, 10))
+
+# remember that each element in rss_lines has the m value, b value, and related rss error
+# rss_lines[0] => [1.417, 70, 26696.0]
+# so we collect the rss errors for each regression line  
+rss_errors = list(map(lambda line: line[-1], rss_lines))
+```
+Plot it!
+```python
+import plotly
+from plotly.offline import init_notebook_mode, iplot
+from graph import m_b_trace, trace_values, plot
+init_notebook_mode(connected=True)
+
+
+cost_curve_trace = trace_values(b_values, rss_errors, mode="lines")
+plot([cost_curve_trace])
+```
+The graph created above is called the **cost curve**. It is a plot of the RSS for different values of  b. 
+
+The curve demonstrates that when  b  is between 100 and 120, the RSS is lowest. This technique of optimizing towards a minimum value is called **gradient descent**. 
+
+Here, we descend along a cost curve. As we change our variable, we need to stop when the value of our RSS no longer decreases.
+
+## Gradient Descent Step Sizes
+
+Summary explanation of Gradient Descent:
+
+1. We quantify the accuracy of the regression line by squaring all of the errors (to eliminate negative values) and adding these squares together to get our residual sum of squares (RSS).
+
+2. Armed with a number that describes the line's accuracy (or goodness of fit), we iteratively try new regression lines by adjusting our y-intercept value,  b , or slope value,  m , and then comparing these RSS values. 
+
+3. By finding the values  m  and  b  that minimize the RSS, we can find our "best fit line".
+
+In our cost function below, you can see the sequential values of  b  and the related RSS values (given a constant value  m ).
+
+```python
+#Cost Curve
+import plotly
+from plotly.offline import init_notebook_mode, iplot
+from graph import m_b_trace, trace_values, plot, build_layout
+init_notebook_mode(connected=True)
+b_values = list(range(70, 150, 10))
+rss = [10852, 9690, 9128, 9166, 9804, 11042, 12880, 15318]
+
+layout = build_layout(options = {'title': 'RSS with changes to y-intercept', 'xaxis': {'title': 'y-intercept value'}, 'yaxis': {'title': 'RSS'}})
+cost_curve_trace = trace_values(b_values, rss, mode="lines")
+plot([cost_curve_trace], layout)
+```
+** Thinking in 3 Dimensions**
+So far, we have held one variable constant in order to experiment with the other. 
+
+**We need an approach that will continue to work as we change both of the variables in our regression line.** 
+
+Altering the second variable makes things far more complicated. Exploring both variables, the slope and the y-intercept, requires plotting the second variable along the horizontal axis and turning our graph into a three-dimensional representation. And in the future we'll be able to change more than just that.
+
+Going forward, rather than arbitrarily changing our variables, as we have done by decrementing the y-intercept by 10 in the example above, we need to move carefully down the cost curve to be certain that our changes are reducing the RSS.
+
+## Step Sizes - Step-by-step
+
+We want an approach that lets us be certain that we're moving in the right direction with every change. Also, we want to know how much of a change to make to minimize RSS.
+
+Let's call each of these changes a **step**, and the size of the change our **step size**.
+
+1. **The slope of the cost curve tells us our step size**
+
+    If the slope tilts downwards, then we should walk forward to approach the minimum.
+
+    And if the slope tilts upwards, then we should point walk backwards to approach the minimum.
+
+    The steeper the tilt, the further away we are from our cost curve's minimum, so we should take a larger step.
+
+2. **Tangent Lines** - the line that just barely touches the curve at that point
+
+    We can follow our technique with more precision by adding some numbers to our slope. 
+    
+    The slope of the curve at any given point is equal to the slope of the tangent line at that point.  
+
+How it works:
+
+We use the following procedure to find the ideal b :
+
+Randomly choose a value of  b , and
+Update  b  with the formula  
+
+b=(−.1)∗slopeb=i+bi
+
+The formula above tells us which  b  value to look at next. We start by choosing a random  b  value that we can plug into our formula. We take the slope of the curve at that  b  value and multiply it by  −.1  then add it to our original  b  value to produce our next  b  value.
+
+As we can surmise, the larger the slope, the larger the resulting step to the next  b  value.
+
+Here's an example. We randomly choose a  b  value of 70. Then:
+
+b=70
+
+b=(−.1)∗−146.17+70=14.61+70=84.61
+
+b=(−.1)∗−58.51+85=5.851+85=90.85
+
+b=(−.1)∗−21.07+90.85=90.851+2.11
+
+**Learning Rate** - Notice that we don't update our values of  b  by just adding or subtracting the slope at that point. The reason we multiply the slope by a fraction like .1 is so that we avoid the risk of **overshooting the minimum.** 
+
+This fraction is called the **learning rate**. Here, the fraction is negative because we always want to move in the opposite direction of the slope. 
+
+When the slope of the cost curve points downwards, we want to move to a higher y-intercept. Conversely, when we are on the right side of the curve and the slope is rising, we want to move backwards to a lower y-intercept.
+
+**Note** This technique is pretty magical. By looking at the tangent line at each point, we no longer are changing our  b  value and just hoping that it has the correct impact on our RSS. 
+
+This is because, for one, the slope of the tangent line points us in the right direction. And as you can see above, our technique properly adjusts the amount to change the  b  value  without even knowing the ideal  b  value. When our  b  was far away from the ideal  b  value, our formula increased  b  by over 14. By the third step, we were updating our  b  value by only 2 because we were closer to the ideal slope for minimizing the RSS.
+
+HERE is a good link to how RMSE is calculated:
+https://www.freecodecamp.org/news/machine-learning-mean-squared-error-regression-line-c7dde9a26b93/
+
+
+## Gradient Descent Steps LAB
+
+1. Setting up initial regression line:
+
+Dictionary with info on movies:
+```python
+first_show = {'budget': 100, 'revenue': 275}
+second_show = {'budget': 200, 'revenue': 300}
+third_show = {'budget': 400, 'revenue': 700}
+
+shows = [first_show, second_show, third_show]
+```
+Start with some values for an initial not-so-accurate regression line,  
+
+y=.6x+133.33
+```python
+from linear_equations import build_regression_line
+
+#Assign variables to lists from the dictionary above
+
+budgets = list(map(lambda show: show['budget'], shows))
+revenues = list(map(lambda show: show['revenue'], shows))
+
+#Provide the regression equation function:
+def regression_line(x):
+    return .6*x + 133.33
+```
+Using the residual_sum_squares function we calculate the RSS to measure the accuracy of the regression line to our data. Let's take another look at that function:
+```python
+#Here is the function for the squared error of a single data point
+def squared_error(x, y, m, b):
+    return (y - (m*x + b))**2
+
+#Here is the function for the squared error of multiple data points. In the mathematical equation, RSS is the sum of the true values of Y minus the fitted values of Y, representing what is 'left over' from our best fit model and the actual data points.
+
+def residual_sum_squares(x_values, y_values, m, b):
+    data_points = list(zip(x_values, y_values))
+    squared_errors = map(lambda data_point: squared_error(data_point[0], data_point[1], m, b), data_points)
+    return sum(squared_errors)
+```
+Now we plot this:
+```python
+from plotly.offline import iplot, init_notebook_mode
+from graph import plot, m_b_trace
+import plotly.graph_objs as go
+
+init_notebook_mode(connected=True)
+
+from graph import trace_values, plot
+
+data_trace = trace_values(budgets, revenues)
+regression_trace = m_b_trace(.6, 133.33, budgets)
+plot([data_trace, regression_trace])
+```
+## Building a cost curve:
+
+Now let's use the **residual_sum_squares** function to build a cost curve. Keeping the  b  value fixed at  133.33 , write a function called **rss_values**.
+
+1. rss_values passes our dataset with the x_values and y_values arguments.
+2. It also takes a list of values of  mm , and an initial  bb  value as arguments.
+3. It outputs a dictionary with keys of m_values and rss_values, with each key pointing to a list of the corresponding values.
+
+```python
+#First import the residual_sum_squares
+from error import residual_sum_squares
+
+#Function uses the RSS equation and iterates across all values:
+def rss_values(x_values, y_values, m_values, b):
+    rss_values = list(map(lambda m_value:residual_sum_squares(x_values, y_values, m_value, b), m_values))
+    return {'m_values':m_values,'rss_values':rss_values}
+```
+In this case, the function is called like so:
+```python
+#Variables first, from above:
+budgets = list(map(lambda show: show['budget'] ,shows))
+revenues = list(map(lambda show: show['revenue'] ,shows))
+
+#Scaling the m-values:
+initial_m_values = list(range(8, 19, 1))
+scaled_m_values = list(map(lambda initial_m_value: initial_m_value/10,initial_m_values))
+
+#B stays the same becasue it is the y-intercept which is constant.
+b_value = 133.33
+
+#Finally, calling the function we just wrote with the above value lists:
+rss_values(budgets, revenues, scaled_m_values, b_value)
+
+# {'m_values': [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8],
+#  'rss_values': [64693.76669999998,
+#   45559.96669999998,
+#   30626.166699999987,
+#   19892.36669999999,
+#   13358.5667,
+#   11024.766700000004,
+#   12890.96670000001,
+#   18957.166700000016,
+#   29223.36670000002,
+#   43689.566700000025,
+#   62355.76670000004]}
+```
+From here it can be plotted and made into a table to help calculate gradient descent:
+
+
+## Looking at the slope of our cost curve
+
+In this section, we'll work up to building a gradient descent function that **automatically changes our step size**. 
+
+To get you started, we'll provide a function called slope_at that calculates the slope of the cost curve at a given point on the cost curve. Here it is in action:
+
+```python
+from helper import slope_at
+
+slope_at(budgets, revenues, .6, 133.33333333333326)
+
+slope_at(budgets, revenues, 1.6, 133.33333333333326)
+```
+So the slope_at function takes in our dataset, and returns the slope of the cost curve at that point.
+
+So now let's write a function called **updated_m**. 
+
+The function will tell us the step size and direction to move along our cost curve. The updated_m function takes as arguments an initial value of  m , a learning rate, and the slope of the cost curve at that value of  m . Its return value is the next value of m that it calculates.
+
+```python
+from error import residual_sum_squares
+
+# I couldnt quite find an equivalent mathimatical formula to go along with this function. Should revisit.
+def updated_m(m, learning_rate, cost_curve_slope):
+    change_to_m = -1 * learning_rate * cost_curve_slope
+    return change_to_m + m
+```
+This is what our function returns.
+```python
+current_slope = slope_at(budgets, revenues, 1.7, 133.33333333333326)['slope']
+updated_m(1.7, .000001, current_slope)
+# 1.5343123333335096
+
+current_slope = slope_at(budgets, revenues, 1.534, 133.33333333333326)['slope']
+updated_m(1.534, .000001, current_slope)
+# 1.43803233333338
+
+current_slope = slope_at(budgets, revenues, 1.438, 133.33333333333326)['slope']
+updated_m(1.438, .000001, current_slope)
+# 1.3823523333332086
+```
+## Gradient Descent Function
+
+Now let's write another function called gradient_descent. 
+
+
+1.  The inputs of the function are x_values, y_values, steps, the b we are holding constant, the learning_rate, and the current_m that we are looking at. 
+2. The steps arguments represents the number of steps the function will take before the function stops. 
+3. We can get a sense of the return value in the cell below. It is a list of dictionaries, with each dictionary having a key of the current m value, the slope of the cost curve at that m value, and the rss at that m value.
+```python
+def gradient_descent(x_values, y_values, steps, b, learning_rate, current_m):
+    cost_curve = []
+    for item in range(steps):
+        current_cost_slope = slope_at(x_values, y_values, current_m, b)['slope']
+        current_rss = residual_sum_squares(x_values, y_values, current_m, b)
+        cost_curve.append({'m': current_m, 'rss': current_rss, 'slope': current_slope})
+        current_m = updated_m(current_m, learning_rate, current_cost_slope) 
+    return cost_curve
+
+#output
+descent_steps = gradient_descent(budgets, revenues, 12, 133.33, learning_rate = .000001, current_m = 0)
+descent_steps
+```
