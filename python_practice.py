@@ -170,3 +170,7 @@ while polling_active:
 	for name, response in responses.items():
 		print(f"\n{name} would  like to live on {response}.")
 
+
+
+#Dictionarieis
+

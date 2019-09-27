@@ -1,6 +1,7 @@
-# Python
+# 1. Beginning Python
 LESSON 1: Introduction to Python
 
+## Strings
 This is how you capitalize first letters
 ```python
 string = "art vandelay" # 'Art Vandelay'
@@ -31,6 +32,8 @@ String Slicing: Isolate the phone number
 string = "7285553334" # 728
 "7285553334"[4:10]
 ```
+## Lists 
+
 Making a List. We indicate that we are initializing a list with an opening bracket, [, and we end the list with a closing bracket ]. We separate each list item, also called an element, with a comma.
 ```python
 top_travel_cities = ['Solta', 'Greenville', 'Buenos Aires', 'Los Cabos', 'Walla Walla Valley', 'Marakesh', 'Albuquerque', 'Archipelago Sea', 'Iguazu Falls']
@@ -1186,7 +1189,44 @@ print(high)
 80
 120
 ```
-## Using range in for loops
+## Range
+
+Range review:
+```python
+#set a range
+range(5)
+range(0,5)
+
+#to see all the values in the range, call like this
+list(range(5))
+(0,1,2,3,4)
+
+#for loops
+for num in range(1,5):
+  print(num)
+1
+2
+3
+4
+
+#add step argument, with the third one as the steo
+for num in range(1,7,2):
+  print(num)
+1
+3
+5
+```
+If we want to 'peek' at range:
+```python
+list(range(4))
+[0,1,2,3]
+
+#OR
+list(range(1,4))
+[1,2,3]
+```
+
+**More on Range for Loops**
 
 Notice that we need to iterate through a list of length 3, but we don’t care what’s in the list. To create these lists of length n, we can use the range function. range takes in a number n as input, and returns a list from 0 to n-1.
 ```python
@@ -1368,224 +1408,7 @@ print(melissa_values)
 melissa_keys = list(users[0].keys())
 print(melissa_keys)
 ```
-Pythagorian Theorum:
 
-```python
-neighbors = [{'name': 'Fred', 'avenue': 4, 'street': 8}, {'name': 'Suzie', 'avenue': 1, 'street': 11}, 
-             {'name': 'Bob', 'avenue': 5, 'street': 8}, {'name': 'Edgar', 'avenue': 6, 'street': 13},
-             {'name': 'Steven', 'avenue': 3, 'street': 6}, {'name': 'Natalie', 'avenue': 5, 'street': 4}]
-
-fred = neighbors[0]
-natalie = neighbors[5]
-
-import plotly
-
-plotly.offline.init_notebook_mode(connected=True)
-trace0 = dict(x=list(map(lambda neighbor: neighbor['avenue'],neighbors)), 
-              y=list(map(lambda neighbor: neighbor['street'],neighbors)),
-              text=list(map(lambda neighbor: neighbor['name'],neighbors)),
-              mode='markers')
-plotly.offline.iplot(dict(data=[trace0], layout={'xaxis': {'dtick': 1}, 'yaxis': {'dtick': 1}}))
-```
-Write a function called street_distance that calculates how far in streets two neighbors are from each other. So for example, with Natalie at street 4, and Fred at street 8, our street_distance function should return the number 4.
-
-```python
-def street_distance(first_neighbor, second_neighbor):
-    return first_neighbor['street']-second_neighbor['street']
-    pass
-
-street_distance(fred, natalie) # 4
-```
-Write a function called avenue_distance that calculates how far in avenues two neighbors are from each other. The distance should always be positive.
-
-```python
-def avenue_distance(first_neighbor, second_neighbor):
-    return abs(first_neighbor['avenue']-second_neighbor['avenue'])
-    pass
-
-avenue_distance(fred, natalie) #  1
-```
-Now let's begin writing functions involved with calculating that hypotenuse of our right triangle. Using the Pythagorean Theorem, a^2+b^2=c^2, write a function called distance_between_neighbors_squared that calculates 
-c^2, the length of the hypotenuse squared.
-
-```python
-def distance_between_neighbors_squared(first_neighbor, second_neighbor):
-    return street_distance(first_neighbor, second_neighbor)**2 + avenue_distance(first_neighbor, second_neighbor)**2
-    pass
-distance_between_neighbors_squared(fred, natalie) # 17
-```
-Now let's move onto the next step and write a function called distance, that given two neighbors returns the distance between them.
-```python
-import math 
-from math import sqrt
-def distance(first_neighbor, second_neighbor):
-    return sqrt(distance_between_neighbors_squared(first_neighbor, second_neighbor))
-    pass
-
-distance(fred, natalie) # 4.123105625617661
-```
-
-## Nearest Neighbors
-
-Writing Our **"Nearest Neighbors"** Functions
-
-
-We first need to calculate the distances between one neighbor and then all of the others. Next, we sort those neighbors by their distance from the selected_neighbor. Finally, we select a given number of the closest neighbors. Let's work through it.
-
-What we already have a function that calculates the distance between two neighbors. We may think we could simply use this function to loop through our neighbors, but that would just return a list of distances.
-```python
-distances = []
-for neighbor in neighbors:
-    distance_between = distance(fred, neighbor)
-    distances.append(distance_between)
-
-distances
-```
-The returned list from the above procedure isn't super helpful. We need to know the person associated with each distance.
-
-
-So let's accomplish this by writing a function called distance_with_neighbor that works like our distance function but instead of returning a float, returns a dictionary representing the second_neighbor, and also adds in the a key value pair indicating distance from the first_neighbor.
-```python
-import math
-from math import sqrt
-
-def distance_with_neighbor(first_neighbor, second_neighbor):
-    nearby_neighbor = second_neighbor.copy()
-    distance = sqrt(distance_between_neighbors_squared(first_neighbor, second_neighbor))
-    nearby_neighbor['distance'] = distance
-    return(nearby_neighbor)
-    Pass
-
-```
-Now write a function called distance_all that returns a list representing the distances between a first_neighbor and the rest of the neighbors. The list should not return the first_neighbor in its collection of neighbors.
-```python
-import math
-def distance_with_neighbor(first_neighbor, second_neighbor):
-    neighbor_with_distance = second_neighbor.copy()
-    distance = math.sqrt(distance_between_neighbors_squared(first_neighbor, second_neighbor))
-    neighbor_with_distance['distance'] = distance
-    return neighbor_with_distance
-
-distance_with_neighbor(fred, natalie)
-# {'avenue': 5, 'distance': 4.123105625617661, 'name': 'Natalie', 'street': 4}
-
-def distance_all(first_neighbor, neighbors):
-    rest_of_neighbors = list(filter(lambda neighbor: neighbor != first_neighbor, neighbors))
-    return list(map(lambda neighbor: distance_with_neighbor(first_neighbor, neighbor), rest_of_neighbors))
-    pass
-
-distance_all(fred, neighbors)
-
-# [{'avenue': 1, 'distance': 4.242640687119285, 'name': 'Suzie', 'street': 11},
-#  {'avenue': 5, 'distance': 1.0, 'name': 'Bob', 'street': 8},
-#  {'avenue': 6, 'distance': 5.385164807134504, 'name': 'Edgar', 'street': 13},
-#  {'avenue': 3, 'distance': 2.23606797749979, 'name': 'Steven', 'street': 6},
-#  {'avenue': 5, 'distance': 4.123105625617661, 'name': 'Natalie', 'street': 4}]
-```
-Finally, write a function called nearest_neighbors that given a neighbor, returns a list of neighbors, ordered from closest to furthest from the neighbor. The function should take an optional third argument that specifies how many "nearest" neighbors are returned.
-```python
-
-nearest_neighbors(fred, neighbors, 2)
-# [{'avenue': 5, 'distance': 1.0, 'name': 'Bob', 'street': 8},
-#  {'avenue': 3, 'distance': 2.23606797749979, 'name': 'Steven', 'street': 6}]
-
-#Write the algorithm for Nearest Neighbors
-
-To write a nearest_neighbors function, we break this into steps:
-Write a function to calculate the distance of one neighbor from another
-Write a function that returns the distance between one neighbor and all others (using map)
-Return a selected number of nearest neighbors
-Calculating the distance of one neighbor from another
-First, we write a function that calculates the distance between one individual and another. This function is a translation of our Pythagorean Theorem, which says that given a first individual with coordinates 
-```python
-import math
-def distance(selected_individual, neighbor):
-   distance_squared = (neighbor['x'] - selected_individual['x'])**2 + (neighbor['y'] - selected_individual['y'])**2
-   return math.sqrt(distance_squared)
-```
-And…
-```python
-def distance_between_neighbors(selected_individual, neighbor):
-    neighbor_with_distance = neighbor.copy()
-    neighbor_with_distance['distance'] = distance(selected_individual, neighbor)
-    return neighbor_with_distance
- 
-distance_between_neighbors(bob, suzie)
-{'name': 'Suzie', 'x': 1, 'y': 11, 'distance': 4.242640687119285}
-```
- 
-The distance_between_neighbors function makes a copy of the neighbor object and then adds a new attribute called distance using the previous distance function. So now we have associated a neighbor with his/her distance from a given point.
- 
-**Creating a list of neighbors with distances**
-
-Next, we write a distance_all function to calculate the distance between a selected_individual, and all of the other neighbors. We do this by calling our distance_between_neighbors function with the selected_individual and each of the rest of the neighbors.
-
-In the distance_all function, we first filter out the selected_individual as we don't want to return the selected individual as a neighbor. Then we calculate the distance between the selected_individual and the rest of the individuals. Finally, for each of the remaining neighbors, we use our distance_between_neighborsmethod to add in a distance attribute to each of the neighbors.
-```python
-def distance_all(selected_individual, neighbors):
-    remaining_neighbors = filter(lambda neighbor: neighbor != selected_individual, neighbors)
-    return list(map(lambda neighbor: distance_between_neighbors(selected_individual, neighbor), remaining_neighbors))
-```
-**Return selected number of nearest neighbors**
-
-Finally, we write our nearest_neighbors function. The function takes an optional argument of number, which represents the number of "nearest" neighbors to return. When set to None, number is reassigned to equal the length of the neighbors list. The nearest_neighbors function finishes by sorting the the "neighbors" by their distance and then slicing the list to return the correct number of neighbors.
-```python
-def nearest_neighbors(selected_individual, neighbors, number = None):
-    number = number or len(neighbors)
-    neighbor_distances = distance_all(selected_individual, neighbors)
-    sorted_neighbors = sorted(neighbor_distances, key=lambda neighbor: neighbor['distance'])
-    return sorted_neighbors[:number]
- 
-nearest_neighbors(bob, neighbors)
-nearest_neighbors(bob, neighbors, 2)
-```
-Python's sorted method lets us sort a list of dictionaries by a certain value. We do so by telling the sortedmethod to compare the values specified in the lambda function, in this case neighbor['distance'].
-
-We have seen how to access elements from a list by explicitly providing the starting element and stopping element in the following manner: sorted_neighbors[0:number]. Above, we implicitly select the first numberof elements from our list by leaving out the starting element.
-
-**Summary**
-In this lesson, we reviewed the nearest neighbors function and saw how it derives from calculating the distance using the Pythagorean Theorem to then sorting neighbors by that interest.
-
-**Nearest Neighbors Overview:** 
-
-Apply our nearest neighbors algorithm
-Here is the nearest neighbors algorithm once again. The code below reflects the following steps:
-
-Write a function to calculate the distance of one neighbor from another
-Write a function that returns the distance between one neighbor and all others (using map)
-Return a selected number of nearest neighbors
-Ok once again, here is the code.
-```python
-import math
-
-def distance(selected_individual, neighbor):
-   distance_squared = (neighbor['x'] - selected_individual['x'])**2 + (neighbor['y'] - selected_individual['y'])**2
-   return math.sqrt(distance_squared)
-
-def distance_between_neighbors(selected_individual, neighbor):
-    neighbor_with_distance = neighbor.copy()
-    neighbor_with_distance['distance'] = distance(selected_individual, neighbor)
-    return neighbor_with_distance
-
-def distance_all(selected_individual, neighbors):
-    remaining_neighbors = filter(lambda neighbor: neighbor != selected_individual, neighbors)
-    return list(map(lambda neighbor: distance_between_neighbors(selected_individual, neighbor), remaining_neighbors))
-
-def nearest_neighbors(selected_individual, neighbors, number = None):
-    number = number or len(neighbors)
-    neighbor_distances = distance_all(selected_individual, neighbors)
-    sorted_neighbors = sorted(neighbor_distances, key=lambda neighbor: neighbor['distance'])
-    return sorted_neighbors[:number]
-
-bob = neighbors[0]
-nearest_neighbor_to_bob = nearest_neighbors(bob, neighbors, 1)
-nearest_neighbor_to_bob
- ```
-We try our nearest_neighbors function on a known piece of data, bob. When we ask our function to return only the closest neighbor, it returns Fred and tells us his number of purchases. Perhaps we can expect Bob's number of purchases to be similar to Fred's. We also can apply the function to a customer at new location to predict this customer's number of purchases.
-```python
-nearest_neighbor_to_new = nearest_neighbors({'x': 4, 'y': 3}, neighbors, 1)
-nearest_neighbor_to_new
-```
 **Row, row, row your boat** - in python:
 ```python
 def repeat_stuff(stuff, num_repeats=10):
@@ -1666,7 +1489,7 @@ train_work = (get_work(train_mass, train_acceleration, train_distance))
 
 print("The GE train does " + str(train_work) + " Joules of work over " + str(train_distance) + " meters.")
 ```
-## Allow or Don't Allow - using IF and ELSE
+## Using IF and ELSE
 
 ```python
 banned_users = ['Melissa', 'Michael', 'Ted', 'Mari', 'Eyeball Monster']
@@ -1720,8 +1543,70 @@ print("We all live happily ever after maybe!")
 #Good news, lumpy booger aliens should be able to survive on earth if you let them eat kittens!
 #We all live happily ever after maybe!
 ```
+## Dictionaries
 
-Multiple Dictionaries - Aliens:
+**Dictionary Basics**
+
+Combining Dictionaries together:
+```python
+colors = {"r": "red", "b":"blue"}
+nums = {1: "one", 2: "two"}
+
+colors.update(nums)
+{'r': 'red', 'b': 'blue', 1: 'one', 2: 'two'}
+```
+Storing a list under a key:
+```python
+colored_vegetables = {"green": ["spinach", "broccoli"]}
+colored_vegetables
+{'green': ['spinach', 'broccoli']}
+
+#test the type
+type(colored_vegetables["green"])
+<class 'list'>
+
+#add to that list within the key
+colored_vegetables["green"].append("cucumber")
+colored_vegetables
+{'green': ['spinach', 'broccoli', 'cucumber']}
+```
+Call all keys OR values OR key value pairs in a dictionary:
+```python
+animals = {"Cat":"Toaster", "Dog":["Mari", "Echo"]}
+animals
+{'Cat': 'Toaster', 'Dog': ['Mari', 'Echo']}
+
+animals.keys()
+dict_keys(['Cat', 'Dog'])
+
+animals.values()
+dict_values(['Toaster', ['Mari', 'Echo']])
+
+#call key value pairs
+animals.items()
+dict_items([('Cat', 'Toaster'), ('Dog', ['Mari', 'Echo'])])
+```
+**Looping over a dictionary:**
+```python
+animals = {"Cat":"Toaster", "Dog":["Mari", "Echo"]}
+
+#need to call ".items" which will provide a tuple
+for animal in animals.items():
+  print(animals)
+
+#it can also be unpacked as a tuple
+for label, animal in animals.items():
+  print(label, animals)
+
+#enumerate:
+for i, animal in  enumerate(animals):
+  print(f"index: {i}, animal: {animals}")
+index: 0, animal: cat
+index: 1, animal: dog
+```
+**Working with Multiple Dictionaries**
+
+Aliens:
 ```python
 alien_1 = {"color":"silver glitter", "points":15}  
 alient_2 = {"color":"green slime","points": 10}
@@ -1770,7 +1655,7 @@ print(f"The new position is {alien_1['x_position']}.")
 Original position: (0, 25)
 The new position is 2.
 ```
-## Looping in Dictionaries:
+### Looping in Dictionaries:
 ```python 
 favorite_aliens = {
   'Ted': 'green slimy',
@@ -1806,8 +1691,35 @@ Adam's favorite alien is Lumpy Booger.
 Gray's favorite alien is Matte Black Sandpapery.
 ```
 ## Sets 
-
 Pulls all values from a list without repeats!
+
+**checking sets**
+```python
+set()
+new_set = {1,2}
+type(new_set)
+class 'set'
+```
+**add new items to sets**
+```python
+new_set.update()
+```
+**add sets together**
+```python
+new_set.union()
+new_set | new_new_set
+```
+**figure out which items are in both sets**
+```python
+new_set.intersection()
+new_set & new_new_set
+```
+**Only items that do not overlap sets**
+```python
+new_set.overlap()
+new_set ^ new_new_set
+```
+Dictionary to Set to remove duplicates!
 ```python
 favorite_aliens = {
   'Ted': 'green slimy',
@@ -1868,7 +1780,62 @@ Thank you Mari for taking the quiz!
 Sara, take the favorite aliens poll!
 Sabina, take the favorite aliens poll!
 ```
-# Nesting
+## Booleon Values
+
+**Truthiness**
+```python 
+bool(0) #Falsy
+False
+bool(1) #Truthy
+True
+
+#Anything not filled in is Falsey, and none-type is Falsy
+#Anything filled in is Truthy
+```
+
+## Moving between data types
+
+Divide a string, such as a CSV, into a list:
+```python
+#Split! - deconcatination?
+string_example = "This,is,a,test,string"
+string_example.split(",")
+['This', 'is', 'a', 'test', 'string']
+#In this case it can be separated on the comma, but you could also use spaces, etc
+```
+Unpack the tuple:
+```python
+student = "Melissa,31,Python"
+student.split(",")
+['Melissa', '31', 'Python']
+student = student.split(",")
+student
+['Melissa', '31', 'Python']
+
+#upack the tuple
+name, age, subject = student.split(",")
+
+name
+'Melissa'
+age
+'31'
+subject
+'Python'
+```
+Concatinate or Join:
+```python
+":".join(student)
+'Melissa:31:Python'
+#In this case we used a colon, but could easily be a "," or " ", etc.
+```
+
+
+
+
+
+
+
+# 2. Nesting
 
 ## Making a list of dictionaries!
 ```python
@@ -1993,7 +1960,7 @@ Gray's favorite aliens are:
 	matte black sandpapery
 	translucent yellow
 ```
-# While Loops
+# 3. While Loops
 
 Need to revisit this!!
 
@@ -2042,7 +2009,7 @@ while True:
  formatted_name = get_formatted(f_name, l_name)
  print(f"\nHello, {formatted_name}!")
 ```
-# Function Practice
+# 4. Function Practice
 
 ## Returning a dictionary with a function:
 ```python
@@ -2093,7 +2060,125 @@ The following models have been printed:
 ['alien', 'robot', 'phone case']
 ['alien', 'robot', 'phone case']
 ```
-# Game of Chance
+# 5. Comprehensions
+
+## List Comprehensions
+
+```python
+names = ["Melissa", "Michael", "Ted", "Janelle Monae"]
+'Melissa'.lower()
+'melissa'
+
+'Melissa'.upper()
+'MELISSA'
+#Let's make a function that works with the whole list
+
+upper_names = []
+for name in names:
+  upper_case_name = name.upper()
+  upper_names.append(upper_case_name)
+  return upper_case_names
+
+['MELISSA', 'MICHAEL', 'TED', 'JANELLE MONAE']
+```
+But there is a better way to see list comprehensions!
+```python
+[name.upper() for name in names] 
+['MELISSA', 'MICHAEL', 'TED', 'JANELLE MONAE']
+```
+List comprehension using Range!
+```python
+[num * num for num in range(5)]
+[0, 1, 4, 9, 16]
+```
+To return a tuple!
+```python
+#include string length
+names = ["Melissa", "Michael", "Ted", "Janelle Monae"]
+[("length", len(name)) for name in names]
+#which gives us the length of each name!
+[('length', 7), ('length', 7), ('length', 3), ('length', 13)]
+```
+Join statement with a list:
+```python
+names = ["Melissa", "Michael", "Ted", "Janelle Monae"]
+f"The names are {names}"
+"The names are ['Melissa', 'Michael', 'Ted', 'Janelle Monae']"
+#To print them each individually within the string
+", ".join([f"The name is {name}" for name in names])
+'The name is Melissa, The name is Michael, The name is Ted, The name is Janelle Monae'
+```
+Combining list comprehension with If statements
+```python
+[num * num for num in range(6)]
+[0, 1, 4, 9, 16, 25]
+
+#What if I want to only list even numbers? Add the modulo operator as an 'If' statement!
+[num * num for num in range(6) if num % 2 == 0]
+[0, 4, 16]
+
+#(lets assign to a variable for ease)
+even_sq_numbers = [num * num for num in range(6) if num % 2 == 0]
+
+#What if i want to turn this into a CVS formatted lsit?
+", ".join([for even_sq_number in even_sq_numbers])
+#BUT it needs to be converted from integers to strings first!
+", ".join([str(even_sq_number) for even_sq_number in even_sq_numbers])
+'0, 4, 16'  
+```
+**Built-in Functions!**
+
+The SUM function!
+```python
+[num * num for num in range(10)]
+square = [num * num for num in range(10)]
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+#call the SUM function!
+sum(squares)
+285
+```
+The MIN and MAX function!
+```python
+min(squares)
+0
+
+max(squares)
+81
+```
+Convert a string to a list of Integers!
+```python
+#first convert it from a string to a list
+lottery_nums = '3, 4, 23, 84'
+lottery_nums.split(', ')
+['3', '4', '23', '84']
+
+#now convert from a list of strings to a list of integers
+[int(num) for num in lottery_nums.split(', ')]
+[3, 4, 23, 84]
+```
+## Other data type comprehensions
+
+**Comprehensions for Set data type**
+```python
+type({1})
+set
+{num * num for num in range(11)}
+{0, 1, 64, 4, 36, 100, 9, 16, 49, 81, 25}
+```
+**Comprehensions for Dictionary data type**
+```python
+type({})
+dictionary
+#Where key is the original numeber and value is the square
+{num * num for num in range(11)}
+#All you do is add a key and colon!
+{num: num*num for num in range (11)}
+{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81, 10: 100}
+```
+
+# 6. Game Practice
+
+## Game of Chance
 ```python
 import random
 
@@ -2112,7 +2197,7 @@ def game_of_chance(guess, bet):
 
 print(game_of_chance(11,10))
 ```
-# Heads or Tails
+## Heads or Tails
 ```python
 import random
 
