@@ -360,6 +360,116 @@ __main__.OutOfStock
 ```
 ## Overriding Methods
 
-nheritance is a useful way of creating objects with different class variables, but is that all it’s good for? What if one of the methods needs to be implemented differently?
+
+**Inheritance** is a useful way of creating objects with different class variables, but is that all it’s good for? What if one of the methods needs to be implemented differently?
 
 All we have to do to override a method definition is to offer a new definition for the method in our subclass.
+```python
+
+#For the following classes:
+class Message:
+  def __init__(self, sender, recipient, text):
+    self.sender = sender
+    self.recipient = recipient
+    self.text = text
+
+class User:
+  def __init__(self, username):
+    self.username = username
+    
+  def edit_message(self, message, new_text):
+    if message.sender == self.username:
+      message.text = new_text
+
+ #Here is the override method. In this example, we've created an Admin override which can edit ANY message, not ont messages that arise from a particular sender like in the method above.     
+class Admin(User):
+  def edit_message(self, message, new_text):
+    message.text = new_text
+```
+ ## Super()
+ Sometimes we want to add some extra logic to the existing method. In order to do that we need a way to call the method from the parent class. Python gives us a way to do that using super().
+
+ super() gives us a proxy object. With this proxy object, we can invoke the method of an object’s parent class (also called its superclass). We call the required function as a method on super():
+
+This line says: “call the constructor (the function called __init__) of the class that is this class’s parent class.
+ 
+ ```python
+#Basically, calling a super() allows the parent method to fullfill it's duty, and then executes a new duty. It differs from Override Method in that Override will only filfill it's new duty.
+class PotatoSalad:
+  def __init__(self, potatoes, celery, onions):
+   self.potatoes = potatoes
+   self.celery = celery
+   self.onions = onions
+    
+class SpecialPotatoSalad(PotatoSalad):
+  def __init__(self, potatoes, celery, onions):
+   super().__init__(potatoes, celery, onions)
+   self.raisins = 40
+#Here, we've allowed the full potato salad to be constructed before executing super() to add the raisins.
+```
+## Interfaces
+
+When two classes have the same method names and attributes, we say they implement the same interface. An interface in Python usually refers to the names of the methods and the arguments they take. 
+
+It basically means that different objects from different classes can perform the same operation (even if it is implemented differently for each class).
+
+```python
+#Insurance Policy is the parent class:
+class InsurancePolicy:
+  def __init__(self, price_of_item):
+    self.price_of_insured_item = price_of_item
+
+#Now we definte two child classes; Vehicle and Home. Each has the same method definited within it, 'get_rate', with slightly different parameters.
+   
+class VehicleInsurance(InsurancePolicy):
+  pass
+
+  def get_rate(self):
+    return self.price_of_insured_item * .001
+
+class HomeInsurance(InsurancePolicy):
+  pass 
+
+  def get_rate(self):
+    return self.price_of_insured_item * .00005
+```
+
+##Polymorphism
+
+Polymorphism is the term used to describe the same syntax (like the + operator being used to add integers, floats, strings, etc -  but it could also be a method name) doing different actions depending on the type of data.
+
+Defining class hierarchies that all implement the same interface is a way of introducing polymorphism to our code.
+
+Here is a classic example of Polymorphism in action, using the built in 'len' function!
+```python
+a_list = [1, 18, 32, 12]
+a_dict = {'value': True}
+a_string = "Polymorphism is cool!"
+
+print(len(a_list))
+print(len(a_dict))
+print(len(a_string))
+```
+## Polymorphism and Magic/Dunder Methods
+
+Here is an example of another Magic Method that is also an example of Polymorphism using the '__add__' method.
+```python
+class Atom:
+  def __init__(self, label):
+    self.label = label
+
+#Here, we added a '__add__' dunder method that creates a Molecule by adding together two atoms.
+  def __add__(self,other):
+    return Molecule([self, other])
+  
+class Molecule:
+  def __init__(self, atoms):
+    if type(atoms) is list:
+	    self.atoms = atoms
+      
+sodium = Atom("Na")
+chlorine = Atom("Cl")
+salt = Molecule([sodium, chlorine])
+# salt = sodium + chlorine
+```
+
