@@ -472,4 +472,50 @@ chlorine = Atom("Cl")
 salt = Molecule([sodium, chlorine])
 # salt = sodium + chlorine
 ```
+In our UserGroup class above we defined three methods:
 
+`__init__`, our constructor, which sets a list of users to the instance variable self.user_list and sets the group’s permissions when we create a new UserGroup.
+
+`__iter__`, the iterator, we use the iter() function to turn the list self.user_list into an iterator so we can use for user in user_group syntax. For more information on iterators, review Python’s documentation of Iterator Types.
+
+`__len__`, the length method, so when we call len(user_group) it will return the length of the underlying self.user_list list.
+
+`__contains__`, the check for containment, allows us to use user in user_group syntax to check if a User exists in the user_list we have.
+
+```python
+class LawFirm:
+  def __init__(self, practice, lawyers):
+    self.practice = practice
+    self.lawyers = lawyers
+    
+  def __len__(self):
+    return len(self.lawyers)
+  
+  #The __contains__ magic method defines True or False membership to a list. In this case, we are checking in an indiviudal 'lawyer' is a member of the self.lawyers.
+  def __contains__(self, lawyer):
+    return lawyer in self.lawyers
+    
+d_and_p = LawFirm("Injury", ["Donelli", "Paderewski"])
+```
+## Review - putting it all together
+
+Here's an example using the built-in type 'List'.
+```python
+class SortedList(list):
+  pass
+
+#Here we use the 'super()' method to override the 'List' type and append the list with values, and then sort it.
+
+  def append(self, value):
+    super().append(value)
+    self.sort()
+
+#In this case, we can call 'self' again to refer back to the list, and call 'sort' on self!
+```
+We subclassed a Python primitive and introduced new behavior to it.
+
+Some things to consider:
+
+When a SortedList gets initialized with unsorted values (say if you call SortedList([4, 1, 5])) those values don’t get sorted! How would you change SortedList so that the list is sorted right after the object gets created?
+
+What other Python builtins have functionality “missing”? Could you write a new dictionary that uses a fallback value when it tries to retrieve an item and can’t?

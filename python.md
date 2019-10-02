@@ -1543,6 +1543,79 @@ print("We all live happily ever after maybe!")
 #Good news, lumpy booger aliens should be able to survive on earth if you let them eat kittens!
 #We all live happily ever after maybe!
 ```
+
+## Lambda
+
+The Python **lambda** statement is an anonymous or unbound function and a pretty limited function at that. 
+
+Lambda is a tool for building functions, or more precisely, for building function objects. That means that Python has two tools for building functions: **def** and **lambda**.
+
+Here is a really basic example of how lambda works:
+```python
+import math
+
+#Finds the square root of the number passed in
+def sqroot(x): 
+    return math.sqrt(x)
+
+square_rt = lambda x: math.sqrt(x)
+
+OR:
+
+sum = lambda x, y:  x + y   #  def sum(x,y): return x + y
+ 
+ OR:
+
+pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
+
+pairs.sort(key=lambda pair: pair[1])
+
+pairs
+[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+```
+Suppose you need to create a function that is going to be used only once — called from only one place in your application. Well, first of all, you don’t need to give the function a name. It can be “anonymous”. And you can just define it right in the place where you want to use it. That’s where lambda is useful.
+
+**What kind of things can I, and can I not, put into a lambda?** 
+
+If it doesn’t return a value, it isn’t an expression and can’t be put into a lambda!
+
+If you can imagine it in an assignment statement, on the right-hand side of the equals sign, it is an expression and can be put into a lambda.
+
+## Map
+
+Here it is used with Lamda:
+
+```python
+def generate_single_email(username, domain, tld):
+  return username + '@' + domain + '.' + tld
+
+def generate_emails(usernames, domain, tld):
+  return list(map(
+    lambda username: generate_single_email(username, domain, tld), 
+    usernames
+  ))
+
+usernames = ['melissa', 'snarfdongler7', 'crappypeanut6ix9ine']
+
+print(generate_emails(usernames, 'poop', 'biz'))
+#output
+['melissa@poop.biz.uk.farts', 'snarfdongler7@poop.biz.uk.farts', 'crappypeanut6ix9ine@poop.biz.uk.farts']
+
+```
+Mapping amd Lamda with a dictionary:
+```python
+peeps = [
+   { 'first_name': 'Melissa', 'last_name': 'Millionz', 'age': 31},
+   { 'first_name': 'Mari', 'last_name': 'El Bogdhadli', 'age': 107}
+ ]
+ def calcuate_names(people):
+   return list(map(
+     lambda person: person['first_name'] + ' ' + person['last_name'],
+     people
+   ))
+
+ print(calcuate_names(peeps))
+```
 ## Dictionaries
 
 **Dictionary Basics**
