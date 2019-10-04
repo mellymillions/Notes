@@ -519,3 +519,187 @@ Some things to consider:
 When a SortedList gets initialized with unsorted values (say if you call SortedList([4, 1, 5])) those values don’t get sorted! How would you change SortedList so that the list is sorted right after the object gets created?
 
 What other Python builtins have functionality “missing”? Could you write a new dictionary that uses a fallback value when it tries to retrieve an item and can’t?
+
+# Steps for Creating Classes and Hierachy
+
+This example shows step by step how to create and use classes.
+
+In this case, we are creating a restaraunt.
+
+## 1. Create the class:
+```python
+class Menu:
+```
+## 2. Assign a constructor.
+
+In this case, we are using the "__init__" construtor and passing in several arguments, including: self, name, items, start_time, end_time
+
+Before moving on, we want to assign each of these arguments to a **self.** variable to make them usable later:
+
+```python
+class Menu:
+  def __init__(self, name, items, start_time, end_time):
+    self.name = name
+    self.items = items
+    self.start_time = start_time
+    self.end_time = end_time
+```
+## 3. Assign instances (instantiate). 
+
+The prompt here reads: "Let’s create our first menu: brunch. Brunch is served from 11am to 4pm. The following items are sold during brunch: (and it provides a dictionary)
+
+Here, we assign the dictionary of brunch items to a variable name, and then instantiate it using the arguments needed for the "__init__" method.
+
+```python
+#First we assign the dictionary to a variable name:
+brunch_items = {
+  'pancakes': 7.50, 'waffles': 9.00, 'burger': 11.00, 'home fries': 4.50, 'coffee': 1.50, 'espresso': 3.00, 'tea': 1.00, 'mimosa': 10.50, 'orange juice': 3.50
+}
+
+#Then, we instantiate this menu by assigning it to the 'Menu' class and passing in the necessary arguments that are needed for __init__ - in this case 'name', 'items', 'start_time', 'end_time'. 'Self' is inherent.
+brunch = Menu('Brunch', brunch_items, 1100, 1700)
+
+#Note that here we also need to assign time type to the start and end times, decided to use a 24hr clock.
+```
+In this case, we're also going to define a couple more instances of the 'Menu' class:
+
+```python
+early_bird_items = {
+  'salumeria plate': 8.00, 'salad and breadsticks (serves 2, no refills)': 14.00, 'pizza with quattro formaggi': 9.00, 'duck ragu': 17.50, 'mushroom ravioli (vegan)': 13.50, 'coffee': 1.50, 'espresso': 3.00,
+}
+
+early_bird = Menu('Early_Bird', early_bird_items, 1500, 1800)
+
+dinner_items = {
+  'crostini with eggplant caponata': 13.00, 'ceaser salad': 16.00, 'pizza with quattro formaggi': 11.00, 'duck ragu': 19.50, 'mushroom ravioli (vegan)': 13.50, 'coffee': 2.00, 'espresso': 3.00,
+}
+
+dinner = Menu('Dinner', dinner_items, 1700, 2300)
+
+kids_items = {
+  'chicken nuggets': 6.50, 'fusilli with wild mushrooms': 12.00, 'apple juice': 3.00
+}
+
+kids = Menu('Kids', kids_items, 1100, 2100)
+```
+## 4. Create a string representation 
+
+Now, we need to create a string repesentation for the 'Menu' class. 
+
+Remember that right now, it you try to print out any of specific instatnce of 'Menu', you get this:
+```python
+print(brunch)
+<__main__.Menu object at X0Fch4igo>
+
+#total gobblygook. Instead, we want to create a string that prints when the intance is called that tells us something about the instance.
+```
+We need to use '__repr___':
+
+```python
+ def __repr__(self):
+   return(f"The {self.name} menu is available from {self.start_time} to {self.end_time} and contains the following items: {self.items}")
+
+#In this case, I included a string that provided information about all the variables, but you could only use a few.
+```
+Now, when we call any of the menus, we get:
+```python
+print(brunch)
+
+The Brunch menu is available from 1100 to 1600 and contains the following items: {'pancakes': 7.5, 'waffles': 9.0, 'burger': 11.0, 'home fries': 4.5, 'coffee': 1.5, 'espresso': 3.0, 'tea': 1.0, 'mimosa': 10.5, 'orange juice': 3.5}
+```
+A much better representation of the instance!
+
+## 5. Create a new method for the Class
+
+In this case, the instructions want us to: "Give Menu a method .calculate_bill() that has two parameters: self, and purchased_items, a list of the names of purchased items. Have calculate_bill return the total price of a purchase consisiting of all the items in purchased_items."
+
+This method is created within the Class - Menu.
+```python
+ def calculate_bill(self, purchased_items):
+   #Here, we set the bill to '0' so that there is something to add to going forward. we know we will call 'bill' in the return.
+   bill = 0
+   #Now we make a for loop:
+   for purchased_item in purchased_items:
+     #The if statement below allows it to loop through each item and determine if it is indeed in the list of items. If it is, then that item will be added to the bill using '+='.
+    if purchased_item in self.items:
+      bill += self.items[purchased_item]
+   return bill
+
+#Putting it all together, the method looks like this:
+ def calculate_bill(self, purchased_items):
+   bill = 0
+   for purchased_item in purchased_items:
+    if purchased_item in self.items:
+      bill += self.items[purchased_item]
+   return bill
+```
+Call the new method to make sure that it works!
+
+Here, we're printing an instance of the class (brunch) dot class method (calculate_bill), and then passing arguments needed for that method. In this case (purchased items), which we called as a list.
+```python
+print(brunch.calculate_bill(['pancakes', 'espresso']))
+10.5
+#It added the prices for pancakes and espresso!
+```
+Now we can use the 'calculate_bill' method for ANY of the menus!
+
+```python
+print(early_bird.calculate_bill(['salumeria plate', 'mushroom raviolli']))
+8.0
+#It calcuated this order was $8, even though it was a totally different menu!
+```
+## 6. Create a new Class
+
+In this example, we are now opening restaraunt franchises, which we will represent with a new class.
+
+First, create the subclass:
+```python
+class Franchise:
+  pass
+```
+Then, define a constructor method. This one takes self, address, and menus. Assign them variables just as you did before.
+
+```python
+class Franchise:
+  def __init__(self, address, menus):
+   self.address = address
+   self.menus = menus
+```
+## Create instances of the new class
+
+Here, we're actually already going to start linking these classes together.
+
+The Franchise class takes menus, and address.
+
+First, we can assign all the menus to a single 'menus' variable:
+```python
+menus = [brunch, dinner, kids, early_bird]
+```
+Then, we can instiate the two new franchises by passing in the addresses (which the program has provided here), and the new variable 'menus'.)
+```python
+flagship_store = Franchise('1232 West End Road', menus)
+
+new_installment = Franchise('12 East Mulberry Street', menus)
+```
+## Give the new Class a String Representation
+
+Use '__repr__' again:
+```python
+ def __repr__(self):
+    return (f"The franchise at {self.address} serves the following menus: {self.menus}")
+
+print(flagship_store)
+#output
+The franchise at 1232 West End Road serves the following menus: brunch, dinner, kids, early_bird
+```
+
+## Provide a method for the new class
+
+```python
+def available_menus(self, time):
+  available_menus = []
+  for menu in self.menus:
+   if time >= menu.start_time and time <= menu.end_time:
+    available_menus.append(menu)
+  return available_menus
+```
