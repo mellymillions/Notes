@@ -665,17 +665,19 @@ class Franchise:
    self.address = address
    self.menus = menus
 ```
-## Create instances of the new class
+## Create instances of the new class (Franchises)
 
 Here, we're actually already going to start linking these classes together.
 
 The Franchise class takes menus, and address.
 
 First, we can assign all the menus to a single 'menus' variable:
+
 ```python
 menus = [brunch, dinner, kids, early_bird]
 ```
 Then, we can instiate the two new franchises by passing in the addresses (which the program has provided here), and the new variable 'menus'.)
+
 ```python
 flagship_store = Franchise('1232 West End Road', menus)
 
@@ -693,7 +695,7 @@ print(flagship_store)
 The franchise at 1232 West End Road serves the following menus: brunch, dinner, kids, early_bird
 ```
 
-## Provide a method for the new class
+## Provide a method for the new class (Franchises)
 
 ```python
 def available_menus(self, time):
@@ -702,4 +704,64 @@ def available_menus(self, time):
    if time >= menu.start_time and time <= menu.end_time:
     available_menus.append(menu)
   return available_menus
+```
+
+## Test by calling the new class
+
+```python
+#Available menus
+print(new_installment.available_menus(1200))
+```
+
+## Create a new class (Buisnesses) and constructor method
+
+class Business:
+  def __init__(self, name, franchises):
+    self.name = name
+    self.franchises = franchises
+
+
+## Assign new instance 
+
+### For existing instances
+
+```python
+#pass in the 'name', and 'franchises' - make sure they are in a list!
+
+business = Business("Bast Fazoolin' with my Heart", [new_installment, flagship_store])
+```
+### For New instances
+
+First, need to provide the menu and create a Menu instance
+```python
+#below is the dictionary containing those menu items
+arepa_menu = {
+  'arepa pabellon': 7.00, 'pernil arepa': 8.50, 'guayanes arepa': 8.00, 'jamon arepa': 7.50
+}
+#and assign to the Menu class
+arepas = Menu("Take a' Arepa", arepa_menu, 1000, 2000)
+```
+Then, create a new Franchise instance
+```python
+#passing in 'address' and 'menus'
+arepas_place = Franchise('189 Fitzgerald Avenue', [arepas])
+#Here, make sure the argument passed in for menus is in the form of a list in case more need to be added.
+```
+Finally, create a new class instance for Buisiness!
+```python
+business1 = Business("Take a' Arepa", [arepas_place])
+```
+
+## Give it a String Represnetation
+
+Before you try and call it!
+```python
+
+  def __repr__(self):
+    return(f"This business {self.name} has the following franchises: {self.franchises}")
+```
+
+## Test the new class by calling it
+```python
+print(business1.franchises[0]. menus[0])
 ```
