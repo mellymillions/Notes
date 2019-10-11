@@ -765,3 +765,28 @@ Before you try and call it!
 ```python
 print(business1.franchises[0]. menus[0])
 ```
+## Dog Example - Day 3
+
+```python
+class Dog:
+
+  species = 'mammal'
+
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+    #self.sound = sound
+  
+  def speak(self,sound):
+    #self.sound = sound
+    print(f"{self.name} says {sound}!")
+  
+  def description(self):
+    print(f"Name is {self.name} and age is {self.age}.")
+
+lars = Dog("lars", 5)
+
+lars.speak('ruff')
+
+lars.description()
+```

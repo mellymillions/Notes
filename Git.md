@@ -1,3 +1,51 @@
+
+**Class Github address:**
+
+git remote add upstream https://github.com/learn-co-students/nyc-ds-100719-lectures.git
+
+Follow the instructions listed in the readme for the repo so it doesnt conflict with Jupyter Notebook.
+
+See Lecture Notes!!
+
+# Lecture Notes:
+
+Lecture_Notes_for_nyc-ds-100719
+
+To update a local repo after forking and cloning
+
+Once the remore is set, you can skip steps 1 and 2:
+
+1. Add the learn-co lecture notes repo as the remote, **this step only happens once**
+
+
+2. Check the remote is set and your lecture notes repo is correct.
+You should see your forked repo after **origin**, and the learn-co-students repo after **upstream**
+
+```python
+git remote -v
+```
+
+3. **Each morning:** - Update the changes from the upstream learn-co lecture notes repo
+```python
+git fetch upstream
+```
+
+4. Check that the master branch is selected
+```python
+git branch
+```
+
+5. **When done working:** - Merge the new changes from the upstream learn-co lecture notes repo, with a commit message
+```python
+git merge upstream/master -m 'what you updated'
+``` 
+
+6. Push the changes to the forked lecture repo :raised_hands:
+```python
+git push
+```
+
+
 # Commiting files
 
 #Committing changes
